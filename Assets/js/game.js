@@ -1,5 +1,33 @@
 var config;
 var game;
+var gameSettings = {
+    playerSpeed: 200,
+    restingSpeed: 0,
+  }
+
+window.onload = function(){
+    config = {
+    width: 1920,
+    height: 1080,
+    scale:{
+        mode: Phaser.Scale.FIT
+    },
+    scene: [Level1, Level1Boss],
+    physics:{
+        default: "arcade",
+        arcade: {
+            debug: false
+        }
+    }
+}
+
+game = new Phaser.Game(config);
+
+}
+
+
+/*var config;
+var game;
 var gameSettings;
 var platforms;
 var stars;
@@ -130,3 +158,4 @@ function resetBoss(boss) {
     boss.x = 0;
     boss.y = 0;
 }
+*/
