@@ -10,7 +10,8 @@ window.onload = function(){
     width: 1920,
     height: 1080,
     scale:{
-        mode: Phaser.Scale.FIT
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.Center_BOTH
     },
     scene: [Level1, Level1Boss],
     physics:{
