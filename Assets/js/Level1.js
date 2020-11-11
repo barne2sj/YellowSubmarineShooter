@@ -25,9 +25,9 @@ class Level1 extends Phaser.Scene{
       frameHeight:46
     });
     //load enemy 1 spritesheet
-    this.load.spritesheet("Enemy1", "assets/images/Enemy1.png", {
-      frameWidth: 621,
-      frameHeight: 485,
+    this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
+      frameWidth: 224,
+      frameHeight: 175,
     });
 
 
@@ -60,7 +60,7 @@ class Level1 extends Phaser.Scene{
 
     //create background sky and ground
     this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "sky");
-    this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
+    //this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
 
     //create the submarine
     this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
@@ -113,7 +113,7 @@ class Level1 extends Phaser.Scene{
   { 
     //moves background sky and ground
     this.skyTile.tilePositionX +=1.0;
-    this.groundTile.tilePositionX +=2.0;
+    //this.groundTile.tilePositionX +=2.0;
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
