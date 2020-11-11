@@ -1,7 +1,7 @@
 class SubmarineProjectiles extends Phaser.GameObjects.Sprite{
   constructor(scene){
-    var x = scene.submarine.x + 250;
-    var y = scene.submarine.y + 50;
+    var x = scene.submarine.x + 175;
+    var y = scene.submarine.y + 20;
 
     super(scene, x, y, "SubmarineProjectile");
     scene.add.existing(this);

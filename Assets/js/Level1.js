@@ -1,3 +1,8 @@
+//create enemy timing variables
+var createEnemyTimer = 0;
+var enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
+
+
 class Level1 extends Phaser.Scene{
   constructor(){
     super("Level1");
@@ -11,17 +16,19 @@ class Level1 extends Phaser.Scene{
 
     //load submarine spritesheet
     this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
-      frameWidth: 552,
-      frameHeight: 242
+      frameWidth: 328,
+      frameHeight: 144
     });
     // load submarine projectile spritesheet
     this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
-      frameWidth:16,
-      frameHeight:16
+      frameWidth:50,
+      frameHeight:46
     });
-
-
-    //load enemies
+    //load enemy 1 spritesheet
+    this.load.spritesheet("Enemy1", "assets/images/Enemy1.png", {
+      frameWidth: 621,
+      frameHeight: 485,
+    });
 
 
     //load pixelfont
@@ -41,6 +48,13 @@ class Level1 extends Phaser.Scene{
       key:"SubmarineProjectile_anim",
       frames: this.anims.generateFrameNumbers("SubmarineProjectile"),
       frameRate:20,
+      repeat:-1
+    });
+    //create enemy 1 animation
+    this.anims.create({
+      key:"Enemy1_anim",
+      frames: this.anims.generateFrameNumbers("Enemy1"),
+      frameRate:1,
       repeat:-1
     });
 
@@ -68,6 +82,7 @@ class Level1 extends Phaser.Scene{
     this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
+    this.tester = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
     //Score graphics
     var graphics = this.add.graphics();
@@ -86,6 +101,12 @@ class Level1 extends Phaser.Scene{
 
     //create a projectiles group
     this.projectiles = this.add.group();
+
+    //create enemies group
+    this.enemies = this.add.group();
+
+    
+    
   }
 
   update ()
@@ -98,6 +119,10 @@ class Level1 extends Phaser.Scene{
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
         this.shootSubmarineProjectile();
     }
+    
+    //create enemy
+    this.checkCreateEnemyTimer(enemeyTimerRandomizer);
+
 
     //Checks for player movement
     this.movePlayerManager();
@@ -107,13 +132,33 @@ class Level1 extends Phaser.Scene{
       var SubmarineProjectile = this.projectiles.getChildren()[i];
       SubmarineProjectile.update();
     }
-    //end Level1 and start Level1Boss (change scenes)
-    /*if(endLevel1){
-      this.scene.start("Level1Boss");
-    }*/
+    //iterate through each element of enemies group
+    for(var i = 0; i < this.enemies.getChildren().length; i++){
+      var Enemy = this.enemies.getChildren()[i];
+      Enemy.update();
+    }
+    
   }
+  //checkEnemyTimer = 0;
+  //createEnemyTimer check
+  checkCreateEnemyTimer(time){
+    if(createEnemyTimer > time){
+      createEnemyTimer = 0;
+      enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
+      console.log(createEnemyTimer);
+      this.createEnemies();
+    }
+    else{
+      createEnemyTimer += 1/60;
+      console.log(createEnemyTimer);
+    }
+  }
+  
   shootSubmarineProjectile(){
     var SubmarineProjectile = new SubmarineProjectiles(this);
+  }
+  createEnemies(){
+    var Enemy = new Enemies(this);
   }
   
   movePlayerManager(){
