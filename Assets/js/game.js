@@ -26,7 +26,7 @@ game = new Phaser.Game(config);
 
 }
 
-
+//testing
 /*var config;
 var game;
 var gameSettings;
