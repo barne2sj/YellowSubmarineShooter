@@ -11,7 +11,7 @@ class Level1 extends Phaser.Scene{
   preload(){
     
     //load background land and sky
-    this.load.image('land', 'assets/images/LoveLower.png');
+    //this.load.image('land', 'assets/images/LoveLower.png');
     this.load.image('sky', 'assets/images/LoveUpper.png');
 
     //load submarine spritesheet
@@ -57,7 +57,6 @@ class Level1 extends Phaser.Scene{
       frameRate:1,
       repeat:-1
     });
-
     //create background sky and ground
     this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "sky");
     //this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
@@ -105,8 +104,8 @@ class Level1 extends Phaser.Scene{
     //create enemies group
     this.enemies = this.add.group();
 
-    
-    
+    //enemy and projectile overlap
+    this.physics.add.overlap(this.projectiles, this.enemies, this.hurtEnemy, null, this);
   }
 
   update ()
@@ -139,18 +138,15 @@ class Level1 extends Phaser.Scene{
     }
     
   }
-  //checkEnemyTimer = 0;
   //createEnemyTimer check
   checkCreateEnemyTimer(time){
     if(createEnemyTimer > time){
       createEnemyTimer = 0;
       enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
-      console.log(createEnemyTimer);
       this.createEnemies();
     }
     else{
       createEnemyTimer += 1/60;
-      console.log(createEnemyTimer);
     }
   }
   
@@ -159,6 +155,16 @@ class Level1 extends Phaser.Scene{
   }
   createEnemies(){
     var Enemy = new Enemies(this);
+  }
+
+  //projectile & enemy collision
+  hurtEnemy(projectiles, enemies) {
+    enemies.health -= 50;;
+    projectiles.destroy();
+    if (enemies.health <= 0){
+      enemies.destroy();
+      projectiles.destroy();
+    }
   }
   
   movePlayerManager(){
