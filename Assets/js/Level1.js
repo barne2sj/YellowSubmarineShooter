@@ -1,6 +1,12 @@
-//create enemy timing variables
+//create global variables
 var createEnemyTimer = 0;
 var enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
+var score = 0;
+var playerDamage = 50;
+var playerSpeed = 300;
+var playerHealth = 100;
+var playerMaxHealth = 100;
+
 
 
 class Level1 extends Phaser.Scene{
@@ -89,14 +95,17 @@ class Level1 extends Phaser.Scene{
     graphics.beginPath();
     graphics.moveTo(0,0);
     graphics.lineTo(config.width, 0);
-    graphics.lineTo(config.width, 40);
-    graphics.lineTo(0, 40);
+    graphics.lineTo(config.width, 80);
+    graphics.lineTo(0, 80);
     graphics.lineTo(0, 0);
     graphics.closePath();
     graphics.fillPath();
 
-    this.score = 0;
-    this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE: ", 30);
+    // add top label
+    this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE: " + score, 50);
+    this.playerHealthLabel = this.add.bitmapText(600, 5, "pixelFont", "PlayerHealth: " + playerHealth + "/" + playerMaxHealth, 50)
+    this.speedLabel = this.add.bitmapText(1100, 5, "pixelFont", "PlayerSpeed: " + playerSpeed, 50);
+    this.damageLabel = this.add.bitmapText(1500, 5, "pixelFont", "PlayerDamage: " + playerDamage, 50);
 
     //create a projectiles group
     this.projectiles = this.add.group();
@@ -104,8 +113,15 @@ class Level1 extends Phaser.Scene{
     //create enemies group
     this.enemies = this.add.group();
 
+    //create enemy hp group
+    this.enemyHPGraphics = this.add.group();
+    this.enemyHPLabel = this.add.group();
+
+    
+
     //enemy and projectile overlap
     this.physics.add.overlap(this.projectiles, this.enemies, this.hurtEnemy, null, this);
+
   }
 
   update ()
@@ -134,15 +150,26 @@ class Level1 extends Phaser.Scene{
     //iterate through each element of enemies group
     for(var i = 0; i < this.enemies.getChildren().length; i++){
       var Enemy = this.enemies.getChildren()[i];
+      var eachEnemyHPLabel = this.enemyHPLabel.getChildren()[0];
+      var eachEnemyHPGraphics = this.enemyHPGraphics.getChildren()[0];
+      if(eachEnemyHPLabel.x <=0){
+        eachEnemyHPLabel.destroy();
+        eachEnemyHPGraphics.destroy();
+        
+      }
       Enemy.update();
+      this.hpLabel.text = Enemy.getHP() + "/200";
+      
     }
+    
+    
     
   }
   //createEnemyTimer check
   checkCreateEnemyTimer(time){
     if(createEnemyTimer > time){
       createEnemyTimer = 0;
-      enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
+      enemeyTimerRandomizer = Phaser.Math.Between(2, 5);
       this.createEnemies();
     }
     else{
@@ -155,58 +182,84 @@ class Level1 extends Phaser.Scene{
   }
   createEnemies(){
     var Enemy = new Enemies(this);
+
+    //hp graphics
+    this.hpgraphics = this.add.graphics();
+    this.hpgraphics.fillStyle(0x000000, 1);
+    this.hpgraphics.beginPath();
+    this.hpgraphics.moveTo(Enemy.body.x+55, Enemy.body.y-30);
+    this.hpgraphics.lineTo(Enemy.body.x+185, Enemy.body.y-30);
+    this.hpgraphics.lineTo(Enemy.body.x+185, Enemy.body.y+0);
+    this.hpgraphics.lineTo(Enemy.body.x+55, Enemy.body.y+0);
+    this.hpgraphics.lineTo(Enemy.body.x+55, Enemy.body.y-30);
+    this.hpgraphics.closePath();
+    this.hpgraphics.fillPath();
+
+    this.hpLabel = this.add.bitmapText(Enemy.body.x+60, Enemy.body.y-28, "pixelFont", Enemy.getHP() + "/" + Enemy.getStartHP(), 40);
+    this.physics.world.enableBody(this.hpgraphics);
+    this.physics.world.enableBody(this.hpLabel);
+    this.hpgraphics.body.velocity.x = -150;
+    this.hpLabel.body.velocity.x = -150;
+
+    this.enemyHPGraphics.add(this.hpgraphics);
+    this.enemyHPLabel.add(this.hpLabel);
+
   }
 
   //projectile & enemy collision
   hurtEnemy(projectiles, enemies) {
-    enemies.health -= 50;;
+    enemies.health -= playerDamage;
     projectiles.destroy();
     if (enemies.health <= 0){
+      score += enemies.starthealth;
+      this.scoreLabel.text = "SCORE " + score;
       enemies.destroy();
       projectiles.destroy();
+      this.hpLabel.destroy();
+      this.hpgraphics.destroy();
     }
   }
   
   movePlayerManager(){
     //move left
     if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -gameSettings.playerSpeed;
+      this.submarine.body.velocity.x = -playerSpeed;
       this.submarine.body.velocity.y=0;
     }
     //move right
     else if(!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = gameSettings.playerSpeed;
+      this.submarine.body.velocity.x = playerSpeed;
       this.submarine.body.velocity.y=0;
     }
     //move up
     else if (!this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.y = -gameSettings.playerSpeed;
+      this.submarine.body.velocity.y = -playerSpeed;
       this.submarine.body.velocity.x = 0;
     }
     //move down
     else if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = gameSettings.playerSpeed;
+      this.submarine.body.velocity.y = playerSpeed;
       this.submarine.body.velocity.x = 0;
     }
     //move up left
     else if(this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -gameSettings.playerSpeed;
-      this.submarine.body.velocity.y = -gameSettings.playerSpeed;
+      this.submarine.body.velocity.x = -playerSpeed;
+      this.submarine.body.velocity.y = -playerSpeed;
     }
     //move up right
     else if(!this.leftKey.isDown && this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = gameSettings.playerSpeed;
-      this.submarine.body.velocity.y = -gameSettings.playerSpeed;
+      this.submarine.body.velocity.x = playerSpeed;
+      this.submarine.body.velocity.y = -playerSpeed;
     }
     //move down left
     else if (this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = gameSettings.playerSpeed;
-      this.submarine.body.velocity.x = -gameSettings.playerSpeed;
+      this.submarine.body.velocity.y = playerSpeed;
+      this.submarine.body.velocity.x = -playerSpeed;
     }
     //move down right
     else if (!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = gameSettings.playerSpeed;
-      this.submarine.body.velocity.x = gameSettings.playerSpeed;
+      this.submarine.body.velocity.y = playerSpeed;
+      this.submarine.body.velocity.x = playerSpeed;
     }
     //stop moving
     else{
