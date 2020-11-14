@@ -13,7 +13,7 @@ function weather(){
         })
       }
          else {
-              window.alert("Could not get location");
+             // window.alert("Could not get location");
         }
     return weatherDescription;
 }

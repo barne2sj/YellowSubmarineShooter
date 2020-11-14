@@ -22,8 +22,7 @@ window.onload = function(){
     }
     
 }
-var currentWeather = weather();
-alert(currentWeather);
+
 game = new Phaser.Game(config);
 
 }
