@@ -117,7 +117,8 @@ class Level1 extends Phaser.Scene{
     this.enemyHPGraphics = this.add.group();
     this.enemyHPLabel = this.add.group();
 
-    
+    //Attempt at creating a container for enemy and health bar
+    //var container = this.add.container([this.enemies,this.enemyHPGraphics,this.enemyHPLabel]);
 
     //enemy and projectile overlap
     this.physics.add.overlap(this.projectiles, this.enemies, this.hurtEnemy, null, this);
