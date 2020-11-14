@@ -17,8 +17,13 @@ class Level1 extends Phaser.Scene{
   preload(){
     
     //load background land and sky
-    //this.load.image('land', 'assets/images/LoveLower.png');
-    this.load.image('sky', 'assets/images/LoveUpper.png');
+    this.load.image('skynight', 'assets/images/LoveUpper-night.png');
+    this.load.image('skyday', 'assets/images/LoveUpper.png');
+    this.load.image('sunclear', 'assets/images/day-layer.png');
+    this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
+    this.load.image('moonclear', 'assets/images/night-layer.png');
+    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
+    
 
     //load submarine spritesheet
     this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
@@ -92,7 +97,30 @@ class Level1 extends Phaser.Scene{
       hiddenOnComplete: true
     });
     //create background sky and ground
-    this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "sky");
+    var currentWeather = weather();
+    if(currentWeather != 'Clear' && currentWeather != ''){
+      currentWeather = 'Cloudy';
+    } else {
+      currentWeather = 'Clear';
+    }
+    var currentDate = new Date();
+    var currentHour = currentDate.getHours();
+    if(currentHour >= 6 && currentHour <= 20) {
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
+      if(currentWeather == 'Clear'){
+        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
+      } else{
+        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
+      }
+    } else {
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skynight");
+      if(currentWeather == 'Clear'){
+        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
+      } else{
+        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
+      }
+    }
+    
     //this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
 
     //create the submarine

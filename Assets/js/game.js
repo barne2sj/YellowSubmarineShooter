@@ -20,8 +20,10 @@ window.onload = function(){
             debug: false
         }
     }
+    
 }
-
+var currentWeather = weather();
+alert(currentWeather);
 game = new Phaser.Game(config);
 
 }
