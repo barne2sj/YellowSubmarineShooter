@@ -20,7 +20,6 @@ window.onload = function(){
             debug: false
         }
     }
-    
 }
 
 game = new Phaser.Game(config);
