@@ -4,8 +4,8 @@ var enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
 var score = 0;
 var playerDamage = 50;
 var playerSpeed = 300;
-var playerHealth = 100;
-var playerMaxHealth = 100;
+var playerHealth = 300;
+var playerMaxHealth = 300;
 
 
 
@@ -36,6 +36,18 @@ class Level1 extends Phaser.Scene{
       frameHeight: 175,
     });
 
+    //load playerExplosion spritesheet
+    this.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
+      frameWidth: 350,
+      frameHeight: 296.5
+    });
+
+    //load smallEnemyExplosion spritesheet
+    this.load.spritesheet("smallEnemyExplosion", "assets/images/smallEnemyExplosion.png", {
+      frameWidth: 418,
+      frameHeight: 354
+    });
+
 
     //load pixelfont
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
@@ -62,6 +74,22 @@ class Level1 extends Phaser.Scene{
       frames: this.anims.generateFrameNumbers("Enemy1"),
       frameRate:1,
       repeat:-1
+    });
+    //create player explosion anim
+    this.anims.create({
+      key: "playerExplosion_anim",
+      frames: this.anims.generateFrameNumbers("playerExplosion"),
+      frameRate: 20,
+      repeat: 0,
+      hiddenOnComplete: true
+    });
+    //creat small enemy explosion anim
+    this.anims.create({
+      key: "smallEnemyExplosion_anim",
+      frames: this.anims.generateFrameNumbers("smallEnemyExplosion"),
+      frameRate: 20,
+      repeat: 0,
+      hiddenOnComplete: true
     });
     //create background sky and ground
     this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "sky");
@@ -115,6 +143,9 @@ class Level1 extends Phaser.Scene{
 
     //enemy and projectile overlap
     this.physics.add.overlap(this.projectiles, this.enemies, this.hurtEnemy, null, this);
+
+    //enemy and player overlap
+    this.physics.add.overlap(this.submarine, this.enemies, this.crashDamage, null, this);
 
   }
 
@@ -177,10 +208,26 @@ class Level1 extends Phaser.Scene{
       score += enemies.starthealth;
       this.scoreLabel.text = "SCORE " + score;
       enemies.destroy();
+      var smallEnemyExplosion = new smallEnemyExplosionClass(this, enemies.x, enemies.y);
+      smallEnemyExplosion.destroy();
       projectiles.destroy();
     }
   }
+
+  crashDamage(submarine, enemies){
+    playerHealth -= enemies.health;
+    this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth
+    enemies.destroy();
+    var smallEnemyExplosion = new smallEnemyExplosionClass(this, enemies.x, enemies.y);
+    smallEnemyExplosion.destroy();
+    if (playerHealth <= 0){
+      var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
+      this.scene.start('deadScene');
+    }
+  }
   
+
+
   movePlayerManager(){
     //move left
     if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
