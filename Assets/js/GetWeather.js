@@ -5,17 +5,18 @@ var weatherDescription = '';
 var object;
 
 function weather(){
+    var weatherWord;
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(function(position){
           var lat = position.coords.latitude;
           var long = position.coords.longitude;
-          showWeather(lat, long);
+          weatherWord = showWeather(lat, long);
         })
       }
          else {
              // window.alert("Could not get location");
         }
-    return weatherDescription;
+    return weatherWord;
 }
 
 function showWeather(lat, long) {
@@ -26,10 +27,10 @@ function showWeather(lat, long) {
     document.getElementsByTagName("head")[0].appendChild(script);
     
     
-    displayWeather(object) ;
+    return displayWeather(object) ;
   }
 
 
  function displayWeather(object) {
-    weatherDescription =  object.currently.summary;
+    return object.currently.summary;
  }

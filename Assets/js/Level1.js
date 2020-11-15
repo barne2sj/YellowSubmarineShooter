@@ -25,6 +25,10 @@ class Level1 extends Phaser.Scene{
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
     this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
+    this.load.image('cloud1', 'assets/images/cloud1.png');
+    this.load.image('cloud2', 'assets/images/cloud2.png');
+    this.load.image('cloud3', 'assets/images/cloud3.png');
+    
 
     //load submarine spritesheet
     this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
@@ -55,7 +59,7 @@ class Level1 extends Phaser.Scene{
     });
     // load enemy1Projectile spritesheet
     this.load.spritesheet("enemy1Projectile", "assets/images/arrowsprite.png", {
-      frameWidth:270,
+      frameWidth:135,
       frameHeight:26
     });
 
@@ -138,7 +142,17 @@ class Level1 extends Phaser.Scene{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
       }
     }
-    
+
+    this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
+    this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
+    this.cloudImage3 = this.add.sprite(config.width + 250, config.height/2 - 200, "cloud3");
+
+    this.clouds = this.physics.add.group();
+
+    this.clouds.add(this.cloudImage1);
+    this.clouds.add(this.cloudImage2);
+    this.clouds.add(this.cloudImage2);
+
     //this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
 
     //create the submarine
@@ -209,7 +223,7 @@ class Level1 extends Phaser.Scene{
     this.physics.add.overlap(this.submarine, this.PowerUps2, this.DamageUp, null, this);
     this.physics.add.overlap(this.submarine, this.PowerUps3, this.SpeedUp, null, this);
 
-
+    this.submarine.setDepth(5);
   }
 
   update ()
@@ -262,8 +276,41 @@ class Level1 extends Phaser.Scene{
     
     //check for level 1 complete
     this.checkWinLevel1();
+
+    this.moveCloud(this.cloudImage1);
+    if(this.cloudImage1.x < (config.width * 0.75) || this.cloudImage2.x < config.width){
+      this.moveCloud(this.cloudImage2);
+    }
+    if(this.cloudImage2.x < (config.width * 0.75) || this.cloudImage3.x < config.width){
+      this.moveCloud(this.cloudImage3);
+    }
+    
     
   }
+
+
+  moveCloud(cloudToMove){
+    cloudToMove.x -= 5;
+    if(cloudToMove.x < 0)
+    {
+      this.resetCloud(cloudToMove);
+    }
+  }
+
+  resetCloud(cloudToMove){
+    cloudToMove.x = config.width + 250;
+    var randomY = Phaser.Math.Between(0, config.height);
+    cloudToMove.y = randomY;
+    var randomForLayer = Phaser.Math.Between(0, config.height)
+    if(randomForLayer < config.height / 2)
+    {
+      cloudToMove.setDepth(10);
+    }else{
+      cloudToMove.setDepth(0);
+    }
+  }
+
+
   //createEnemyTimer check
   checkCreateEnemyTimer(time){
     if(createEnemyTimer > time){
@@ -418,4 +465,5 @@ class Level1 extends Phaser.Scene{
 
   }
   
+
 }
