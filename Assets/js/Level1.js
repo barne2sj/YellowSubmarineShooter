@@ -1,6 +1,8 @@
 //create global variables
 var createEnemyTimer = 0;
-var enemeyTimerRandomizer = Phaser.Math.Between(7, 10);
+var enemyTimerRandomizer = Phaser.Math.Between(7, 10);
+var createPowerUpTimer = 0;
+var PowerUpTimerRandomizer = Phaser.Math.Between (3, 5);
 var score = 0;
 var playerDamage = 50;
 var playerSpeed = 300;
@@ -56,6 +58,11 @@ class Level1 extends Phaser.Scene{
       frameWidth:270,
       frameHeight:26
     });
+
+    //load powerup images
+    this.load.image('PowerUp1', 'assets/images/PowerUp1.png');
+    this.load.image('PowerUp2', 'assets/images/PowerUp2.png');
+    this.load.image('PowerUp3', 'assets/images/PowerUp3.png');
 
     //load pixelfont
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
@@ -183,6 +190,11 @@ class Level1 extends Phaser.Scene{
     //create enemy1projectile group
     this.enemyProjectiles = this.add.group();
 
+    //create powerup groups
+    this.PowerUps1 = this.add.group();
+    this.PowerUps2 = this.add.group();
+    this.PowerUps3 = this.add.group();
+
     //enemy and projectile overlap
     this.physics.add.overlap(this.projectiles, this.enemies, this.hurtEnemy, null, this);
 
@@ -191,6 +203,12 @@ class Level1 extends Phaser.Scene{
 
     //enemy projectile and player overlap
     this.physics.add.overlap(this.submarine, this.enemyProjectiles, this.playerHit, null, this);
+
+    //player collision with power ups
+    this.physics.add.overlap(this.submarine, this.PowerUps1, this.HealthUp, null, this);
+    this.physics.add.overlap(this.submarine, this.PowerUps2, this.DamageUp, null, this);
+    this.physics.add.overlap(this.submarine, this.PowerUps3, this.SpeedUp, null, this);
+
 
   }
 
@@ -206,8 +224,8 @@ class Level1 extends Phaser.Scene{
     }
     
     //create enemy
-    this.checkCreateEnemyTimer(enemeyTimerRandomizer);
-
+    this.checkCreateEnemyTimer(enemyTimerRandomizer);
+    this.checkCreatePowerUpTimer(PowerUpTimerRandomizer);
 
     //Checks for player movement
     this.movePlayerManager();
@@ -221,9 +239,25 @@ class Level1 extends Phaser.Scene{
     for(var i = 0; i < this.enemies.getChildren().length; i++){
       var Enemy = this.enemies.getChildren()[i];
       Enemy.update(); 
-      if(Enemy.update()%120 ==0){
+      if(Enemy.update()%240 ==0){
         var littleEnemyProjectile = new enemyProjectile(this, Enemy.x, Enemy.y)
       }  
+    }
+
+    //iterate through PowerUps1 group
+    for(var i = 0; i < this.PowerUps1.getChildren().length; i++){
+      var thisPowerUp1 = this.PowerUps1.getChildren()[i];
+      thisPowerUp1.update();
+    }
+    //iterate through PowerUps1 group
+    for(var i = 0; i < this.PowerUps2.getChildren().length; i++){
+      var thisPowerUp2 = this.PowerUps2.getChildren()[i];
+      thisPowerUp2.update();
+    }
+    //iterate through PowerUps1 group
+    for(var i = 0; i < this.PowerUps3.getChildren().length; i++){
+      var thisPowerUp3 = this.PowerUps3.getChildren()[i];
+      thisPowerUp3.update();
     }
     
     //check for level 1 complete
@@ -234,11 +268,22 @@ class Level1 extends Phaser.Scene{
   checkCreateEnemyTimer(time){
     if(createEnemyTimer > time){
       createEnemyTimer = 0;
-      enemeyTimerRandomizer = Phaser.Math.Between(2, 5);
+      enemyTimerRandomizer = Phaser.Math.Between(7, 10);
       this.createEnemies();
     }
     else{
       createEnemyTimer += 1/60;
+    }
+  }
+
+  checkCreatePowerUpTimer(time){
+    if(createPowerUpTimer > time){
+      createPowerUpTimer = 0;
+      PowerUpTimerRandomizer = Phaser.Math.Between(3,5);
+      this.createPowerUp();
+    }
+    else{
+      createPowerUpTimer += 1/60;
     }
   }
   
@@ -248,6 +293,12 @@ class Level1 extends Phaser.Scene{
   createEnemies(){
     var enemyNumber = 1;
     var Enemy = new Enemies(this, enemyNumber);
+  }
+
+  createPowerUp(){
+    var PowerUpNumber = Phaser.Math.Between(1, 100);
+    var PlayerPowerUp = new PowerUp(this, PowerUpNumber);
+    //var PlayerPowerUp = new PowerUp(this, 25);
   }
 
   //projectile & enemy collision
@@ -281,6 +332,35 @@ class Level1 extends Phaser.Scene{
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
       this.scene.start('deadScene');
     }
+  }
+
+  //collisions with power ups
+  HealthUp(submarine, powerup1){
+    if (playerHealth < playerMaxHealth - 150){
+      playerHealth += 200;
+      playerMaxHealth +=50;
+      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+      powerup1.destroy();
+    }
+    else {
+      var healthDifference = playerMaxHealth - playerHealth;
+      playerMaxHealth +=50;
+      playerHealth += (healthDifference + 50);
+      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+      powerup1.destroy();
+    }
+  }
+
+  DamageUp(submarine, powerup2){
+    playerDamage +=50;
+    this.damageLabel.text = "PlayerDamage: " + playerDamage;
+    powerup2.destroy();
+  }
+
+  SpeedUp(submarine, powerup3){
+    playerSpeed += 100;
+    this.speedLabel.text = "PlayerSpeed: " + playerSpeed;
+    powerup3.destroy();
   }
   
   checkWinLevel1(){
