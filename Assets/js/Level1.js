@@ -2,12 +2,16 @@
 var createEnemyTimer = 0;
 var enemyTimerRandomizer = Phaser.Math.Between(7, 10);
 var createPowerUpTimer = 0;
-var PowerUpTimerRandomizer = Phaser.Math.Between (3, 5);
+var PowerUpTimerRandomizer = Phaser.Math.Between (20, 40);
 var score = 0;
 var playerDamage = 50;
 var playerSpeed = 300;
 var playerHealth = 300;
 var playerMaxHealth = 300;
+var bossHealth = 0;
+var bossMaxHealth = 0;
+var handBossJumpTimer = Phaser.Math.Between(20, 100);
+var handBossJumpCount = 0;
 
 
 
@@ -175,8 +179,6 @@ class Level1 extends Phaser.Scene{
     this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-    this.tester = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-
     //Score graphics
     var graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1);
@@ -223,6 +225,7 @@ class Level1 extends Phaser.Scene{
     this.physics.add.overlap(this.submarine, this.PowerUps2, this.DamageUp, null, this);
     this.physics.add.overlap(this.submarine, this.PowerUps3, this.SpeedUp, null, this);
 
+    //set depth of submarine
     this.submarine.setDepth(5);
   }
 
@@ -230,7 +233,6 @@ class Level1 extends Phaser.Scene{
   { 
     //moves background sky and ground
     this.skyTile.tilePositionX +=1.0;
-    //this.groundTile.tilePositionX +=2.0;
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
@@ -249,6 +251,13 @@ class Level1 extends Phaser.Scene{
       var SubmarineProjectile = this.projectiles.getChildren()[i];
       SubmarineProjectile.update();
     }
+
+    //iterate through each element of enemyprojectile group
+    for(var i = 0; i < this.enemyProjectiles.getChildren().length; i++){
+      var EnemyProjectile = this.enemyProjectiles.getChildren()[i];
+      EnemyProjectile.update();
+    }
+
     //iterate through each element of enemies group
     for(var i = 0; i < this.enemies.getChildren().length; i++){
       var Enemy = this.enemies.getChildren()[i];
@@ -263,12 +272,12 @@ class Level1 extends Phaser.Scene{
       var thisPowerUp1 = this.PowerUps1.getChildren()[i];
       thisPowerUp1.update();
     }
-    //iterate through PowerUps1 group
+    //iterate through PowerUps2 group
     for(var i = 0; i < this.PowerUps2.getChildren().length; i++){
       var thisPowerUp2 = this.PowerUps2.getChildren()[i];
       thisPowerUp2.update();
     }
-    //iterate through PowerUps1 group
+    //iterate through PowerUps3 group
     for(var i = 0; i < this.PowerUps3.getChildren().length; i++){
       var thisPowerUp3 = this.PowerUps3.getChildren()[i];
       thisPowerUp3.update();
@@ -277,6 +286,7 @@ class Level1 extends Phaser.Scene{
     //check for level 1 complete
     this.checkWinLevel1();
 
+    //move clouds across screen
     this.moveCloud(this.cloudImage1);
     if(this.cloudImage1.x < (config.width * 0.75) || this.cloudImage2.x < config.width){
       this.moveCloud(this.cloudImage2);
@@ -288,7 +298,7 @@ class Level1 extends Phaser.Scene{
     
   }
 
-
+  //move cloud
   moveCloud(cloudToMove){
     cloudToMove.x -= 5;
     if(cloudToMove.x < 0)
@@ -296,10 +306,10 @@ class Level1 extends Phaser.Scene{
       this.resetCloud(cloudToMove);
     }
   }
-
+  // reset cloud
   resetCloud(cloudToMove){
     cloudToMove.x = config.width + 250;
-    var randomY = Phaser.Math.Between(0, config.height);
+    var randomY = Phaser.Math.Between(200, config.height);
     cloudToMove.y = randomY;
     var randomForLayer = Phaser.Math.Between(0, config.height)
     if(randomForLayer < config.height / 2)
@@ -326,7 +336,7 @@ class Level1 extends Phaser.Scene{
   checkCreatePowerUpTimer(time){
     if(createPowerUpTimer > time){
       createPowerUpTimer = 0;
-      PowerUpTimerRandomizer = Phaser.Math.Between(3,5);
+      PowerUpTimerRandomizer = Phaser.Math.Between(20,40);
       this.createPowerUp();
     }
     else{
@@ -367,7 +377,7 @@ class Level1 extends Phaser.Scene{
     enemyProjectiles.destroy();
     if(playerHealth <= 0){
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
-      this.scene.start('deadScene')
+      this.scene.start('deadScene', {transferScore: score});
     }
   }
   crashDamage(submarine, enemies){
@@ -377,7 +387,7 @@ class Level1 extends Phaser.Scene{
     var smallEnemyExplosion = new smallEnemyExplosionClass(this, enemies.x, enemies.y);
     if (playerHealth <= 0){
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
-      this.scene.start('deadScene');
+      this.scene.start('deadScene', {transferScore: score});
     }
   }
 
@@ -409,9 +419,11 @@ class Level1 extends Phaser.Scene{
     this.speedLabel.text = "PlayerSpeed: " + playerSpeed;
     powerup3.destroy();
   }
-  
+  //check win and set boss health
   checkWinLevel1(){
-    if (score >= 1000){
+    if (score >= 200){
+      bossHealth = 1200;
+      bossMaxHealth = 1200;
       this.scene.start('Level1Boss');
     }
   }
