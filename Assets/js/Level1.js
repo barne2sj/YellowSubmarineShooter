@@ -123,7 +123,7 @@ class Level1 extends Phaser.Scene{
     });
 
     //create background sky and ground
-    var currentWeather = weather();
+    var currentWeather = getWeather();
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {
