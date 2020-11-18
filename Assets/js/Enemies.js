@@ -5,19 +5,67 @@ class Enemies extends Phaser.GameObjects.Sprite{
     var health;
     var starthealth;
     var attackTimer;
+    var projectileNumber;
+
+
     //enemy 1 creation
-    if (enemyNumber == 1){
+    if (enemyNumber < 1){
     super(scene, x, y, "Enemy1");
     this.attackTimer = 0;
     scene.add.existing(this);
     this.play("Enemy1_anim");
     scene.physics.world.enableBody(this);
+    this.projectileNumber = enemyNumber;
 
     this.body.velocity.x= -150;
-    this.health = 200;
-    this.starthealth = 200;
+    this.health = 200 * levelMultiplier;
+    this.starthealth = 200 * levelMultiplier;
 
     scene.enemies.add(this);
+    }
+    if (enemyNumber >= 1 && enemyNumber <=2){
+      super(scene, x, y, "Enemy2");
+      this.attackTimer = 0;
+      scene.add.existing(this);
+      this.play("Enemy2_anim");
+      scene.physics.world.enableBody(this);
+      this.projectileNumber = enemyNumber;
+      
+      this.body.velocity.x= -150;
+      this.health = 200 * levelMultiplier;
+      this.starthealth = 200 * levelMultiplier;
+  
+      scene.enemies.add(this);
+    }
+    if (enemyNumber > 2 && enemyNumber <=3){
+      super(scene, x, y, "Enemy3");
+      this.attackTimer = 0;
+      scene.add.existing(this);
+      this.play("Enemy3_anim");
+      scene.physics.world.enableBody(this);
+
+      this.projectileNumber = enemyNumber;
+  
+      this.body.velocity.x= -150;
+      this.health = 200 * levelMultiplier;
+      this.starthealth = 200 * levelMultiplier;
+  
+      scene.enemies.add(this);
+    }
+    if (enemyNumber > 3 && enemyNumber <=4){
+      super(scene, x, y, "Enemy4");
+      this.attackTimer = 0;
+      scene.add.existing(this);
+      this.play("Enemy4_anim");
+      scene.physics.world.enableBody(this);
+
+      this.projectileNumber = enemyNumber;
+
+      this.body.velocity.x= -150;
+      this.health = 200 * levelMultiplier;
+      this.starthealth = 200 * levelMultiplier;
+  
+      scene.enemies.add(this);
     }
   }
   update(){

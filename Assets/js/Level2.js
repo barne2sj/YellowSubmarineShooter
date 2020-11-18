@@ -1,30 +1,13 @@
-//create global variables
-var createEnemyTimer = 0;
-var enemyTimerRandomizer = Phaser.Math.Between(7, 10);
-var createPowerUpTimer = 0;
-var PowerUpTimerRandomizer = Phaser.Math.Between (20, 40);
-var score = 0;
-var playerDamage = 1500;
-var playerSpeed = 300;
-var playerHealth = 1500;
-var playerMaxHealth = 1500;
-var bossHealth = 0;
-var bossMaxHealth = 0;
-var handBossJumpTimer = Phaser.Math.Between(20, 100);
-var handBossJumpCount = 0;
-var levelMultiplier = 0;
-
-
-class Level1 extends Phaser.Scene{
+class Level2 extends Phaser.Scene{
   constructor(){
-    super("Level1");
+    super("Level2");
   }
 
   preload(){
     
     //load background land and sky
-    this.load.image('skynight', 'assets/images/LoveUpper-night.png');
-    this.load.image('skyday', 'assets/images/LoveUpper.png');
+    this.load.image('waterNight', 'assets/images/waterNight.png');
+    this.load.image('waterDay', 'assets/images/waterDay.png');
     this.load.image('sunclear', 'assets/images/day-layer.png');
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
@@ -44,10 +27,22 @@ class Level1 extends Phaser.Scene{
       frameWidth:50,
       frameHeight:46
     });
-    //load enemy 1 spritesheet
-    this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
-      frameWidth: 224,
-      frameHeight: 175,
+    //load enemy 2 spritesheet
+    this.load.spritesheet("Enemy2", "assets/images/BlueSub.png", {
+      frameWidth: 655.5,
+      frameHeight: 287.5,
+    });
+
+    //load enemy 3 spritesheet
+    this.load.spritesheet("Enemy3", "assets/images/PinkSub.png", {
+      frameWidth: 655.5,
+      frameHeight: 287.5,
+    });
+
+    //load enemy 4 spritesheet
+    this.load.spritesheet("Enemy4", "assets/images/GreenSub.png", {
+      frameWidth: 655.5,
+      frameHeight: 287.5,
     });
 
     //load playerExplosion spritesheet
@@ -61,10 +56,10 @@ class Level1 extends Phaser.Scene{
       frameWidth: 418,
       frameHeight: 354
     });
-    // load enemy1Projectile spritesheet
-    this.load.spritesheet("enemy1Projectile", "assets/images/arrowsprite.png", {
-      frameWidth:135,
-      frameHeight:26
+    // load enemySubProjectile spritesheet
+    this.load.spritesheet("enemySubProjectile", "assets/images/torpedo.png", {
+      frameWidth:146.5,
+      frameHeight:16.5
     });
 
     //load powerup images
@@ -91,10 +86,24 @@ class Level1 extends Phaser.Scene{
       frameRate:20,
       repeat:-1
     });
-    //create enemy 1 animation
+    //create enemy 2 animation
     this.anims.create({
-      key:"Enemy1_anim",
-      frames: this.anims.generateFrameNumbers("Enemy1"),
+      key:"Enemy2_anim",
+      frames: this.anims.generateFrameNumbers("Enemy2"),
+      frameRate:1,
+      repeat:-1
+    });
+    //create enemy 3 animation
+    this.anims.create({
+      key:"Enemy3_anim",
+      frames: this.anims.generateFrameNumbers("Enemy3"),
+      frameRate:1,
+      repeat:-1
+    });
+    //create enemy 4 animation
+    this.anims.create({
+      key:"Enemy4_anim",
+      frames: this.anims.generateFrameNumbers("Enemy4"),
       frameRate:1,
       repeat:-1
     });
@@ -114,10 +123,10 @@ class Level1 extends Phaser.Scene{
       repeat: 0,
       hideOnComplete: true
     });
-    //create enemy1Projectile animation
+    //create enemySubProjectile animation
     this.anims.create({
-      key:"enemy1Projectile_anim",
-      frames: this.anims.generateFrameNumbers("enemy1Projectile"),
+      key:"enemySubProjectile_anim",
+      frames: this.anims.generateFrameNumbers("enemySubProjectile"),
       frameRate:20,
       repeat:-1
     });
@@ -132,14 +141,14 @@ class Level1 extends Phaser.Scene{
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
     if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "waterDay");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
       } else{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
       }
     } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skynight");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "waterNight");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
       } else{
@@ -227,8 +236,7 @@ class Level1 extends Phaser.Scene{
 
     //set depth of submarine
     this.submarine.setDepth(5);
-
-    levelMultiplier = 1;
+    levelMultiplier = 2;
   }
 
   update ()
@@ -243,6 +251,8 @@ class Level1 extends Phaser.Scene{
     
     //create enemy
     this.checkCreateEnemyTimer(enemyTimerRandomizer);
+
+    //create powerups
     this.checkCreatePowerUpTimer(PowerUpTimerRandomizer);
 
     //Checks for player movement
@@ -268,6 +278,11 @@ class Level1 extends Phaser.Scene{
         if(Enemy.projectileNumber < 1){
           var littleEnemyProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 1);
         }
+        if(Enemy.projectileNumber >=1 && Enemy.projectileNumber <= 4){
+          var straightProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 2);
+          var upProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 3);
+          var downProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 4);
+        }
       }  
     }
 
@@ -288,7 +303,7 @@ class Level1 extends Phaser.Scene{
     }
     
     //check for level 1 complete
-    this.checkWinLevel1();
+    this.checkWinLevel2();
 
     //move clouds across screen
     this.moveCloud(this.cloudImage1);
@@ -352,8 +367,8 @@ class Level1 extends Phaser.Scene{
     var SubmarineProjectile = new SubmarineProjectiles(this);
   }
   createEnemies(){
-    //var enemyNumber = 0.75;
-    var Enemy = new Enemies(this, 0.75);
+    var enemyNumber = Phaser.Math.Between(1, 4);
+    var Enemy = new Enemies(this, enemyNumber);
   }
 
   createPowerUp(){
@@ -376,7 +391,7 @@ class Level1 extends Phaser.Scene{
   }
 
   playerHit(submarine, enemyProjectiles){
-    playerHealth -=25;
+    playerHealth -=(25 * levelMultiplier);
     this.playerHealthLabel.text = "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
     enemyProjectiles.destroy();
     if(playerHealth <= 0){
@@ -424,11 +439,12 @@ class Level1 extends Phaser.Scene{
     powerup3.destroy();
   }
   //check win and set boss health
-  checkWinLevel1(){
-    if (score >= 200){
+  checkWinLevel2(){
+    if (score >= 2000){
       bossHealth = 1200;
       bossMaxHealth = 1200;
-      this.scene.start('Level1Boss');
+      //this.scene.start('Level2Boss');
+      console.log("level 2 win")
     }
   }
 

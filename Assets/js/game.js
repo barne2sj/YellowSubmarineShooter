@@ -13,7 +13,7 @@ window.onload = function(){
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.Center_BOTH
     },
-    scene: [Level1, Level1Boss, deadScene],
+    scene: [Level1, Level1Boss, deadScene, Level2],
     physics:{
         default: "arcade",
         arcade: {

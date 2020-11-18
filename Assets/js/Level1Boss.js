@@ -330,7 +330,7 @@ class Level1Boss extends Phaser.Scene{
     if (bossHealth<= 0){
       score += bossMaxHealth;
       handBoss.destroy();
-      console.log("winner");
+      this.scene.start('Level2');
     }
   }
 
