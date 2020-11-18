@@ -29,14 +29,14 @@ class Level2 extends Phaser.Scene{
     });
     //load enemy 2 spritesheet
     this.load.spritesheet("Enemy2", "assets/images/BlueSub.png", {
-      frameWidth: 655.5,
-      frameHeight: 287.5,
+      frameWidth: 328,
+      frameHeight: 144,
     });
 
     //load enemy 3 spritesheet
     this.load.spritesheet("Enemy3", "assets/images/PinkSub.png", {
-      frameWidth: 655.5,
-      frameHeight: 287.5,
+      frameWidth: 328,
+      frameHeight: 144,
     });
 
     //load enemy 4 spritesheet
@@ -58,8 +58,8 @@ class Level2 extends Phaser.Scene{
     });
     // load enemySubProjectile spritesheet
     this.load.spritesheet("enemySubProjectile", "assets/images/torpedo.png", {
-      frameWidth:146.5,
-      frameHeight:16.5
+      frameWidth:111,
+      frameHeight:25
     });
 
     //load powerup images
