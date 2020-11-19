@@ -11,7 +11,7 @@ class enemyProjectile extends Phaser.GameObjects.Sprite{
       scene.enemyProjectiles.add(this);
     }
     if(number ==2){
-      super(scene, x, y, "enemySubProjectile");
+      super(scene, x-175, y+20, "enemySubProjectile");
       scene.add.existing(this);
       this.play("enemySubProjectile_anim");
       scene.physics.world.enableBody(this);
@@ -19,21 +19,21 @@ class enemyProjectile extends Phaser.GameObjects.Sprite{
       scene.enemyProjectiles.add(this);
     }
     if(number ==3){
-      super(scene, x, y, "enemySubProjectile");
+      super(scene, x-175, y+20, "enemySubProjectile");
       scene.add.existing(this);
       this.play("enemySubProjectile_anim");
       scene.physics.world.enableBody(this);
       this.body.velocity.x = -500;
-      this.body.velocity.y = -50;
+      this.body.velocity.y = -150;
       scene.enemyProjectiles.add(this);
     }
     if(number == 4){
-      super(scene, x, y, "enemySubProjectile");
+      super(scene, x-175, y+20, "enemySubProjectile");
       scene.add.existing(this);
       this.play("enemySubProjectile_anim");
       scene.physics.world.enableBody(this);
       this.body.velocity.x = -500;
-      this.body.velocity.y = 50;
+      this.body.velocity.y = 150;
       scene.enemyProjectiles.add(this);
     }
 

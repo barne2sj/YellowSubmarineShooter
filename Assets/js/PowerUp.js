@@ -44,6 +44,6 @@ class PowerUp extends Phaser.GameObjects.Sprite{
   update(){
     //if(this.x < 0){this.destroy();}
     this.dissappearTimer ++;
-    if(this.dissappearTimer >= 1200){this.destroy();}
+    if(this.dissappearTimer >= 9000){this.destroy();}
   }
 }

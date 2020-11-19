@@ -11,11 +11,7 @@ class Level2 extends Phaser.Scene{
     this.load.image('sunclear', 'assets/images/day-layer.png');
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
-    this.load.image('cloud1', 'assets/images/cloud1.png');
-    this.load.image('cloud2', 'assets/images/cloud2.png');
-    this.load.image('cloud3', 'assets/images/cloud3.png');
-    
+    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');    
 
     //load submarine spritesheet
     this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
@@ -41,8 +37,8 @@ class Level2 extends Phaser.Scene{
 
     //load enemy 4 spritesheet
     this.load.spritesheet("Enemy4", "assets/images/GreenSub.png", {
-      frameWidth: 655.5,
-      frameHeight: 287.5,
+      frameWidth: 328,
+      frameHeight: 144,
     });
 
     //load playerExplosion spritesheet
@@ -132,7 +128,7 @@ class Level2 extends Phaser.Scene{
     });
 
     //create background sky and ground
-    var currentWeather = weather();
+    var currentWeather = getWeather();
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {
@@ -156,17 +152,6 @@ class Level2 extends Phaser.Scene{
       }
     }
 
-    this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
-    this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
-    this.cloudImage3 = this.add.sprite(config.width + 250, config.height/2 - 200, "cloud3");
-
-    this.clouds = this.physics.add.group();
-
-    this.clouds.add(this.cloudImage1);
-    this.clouds.add(this.cloudImage2);
-    this.clouds.add(this.cloudImage2);
-
-    //this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
 
     //create the submarine
     this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
@@ -304,47 +289,16 @@ class Level2 extends Phaser.Scene{
     
     //check for level 1 complete
     this.checkWinLevel2();
-
-    //move clouds across screen
-    this.moveCloud(this.cloudImage1);
-    if(this.cloudImage1.x < (config.width * 0.75) || this.cloudImage2.x < config.width){
-      this.moveCloud(this.cloudImage2);
-    }
-    if(this.cloudImage2.x < (config.width * 0.75) || this.cloudImage3.x < config.width){
-      this.moveCloud(this.cloudImage3);
-    }
-    
-    
+  
   }
 
-  //move cloud
-  moveCloud(cloudToMove){
-    cloudToMove.x -= 5;
-    if(cloudToMove.x < 0)
-    {
-      this.resetCloud(cloudToMove);
-    }
-  }
-  // reset cloud
-  resetCloud(cloudToMove){
-    cloudToMove.x = config.width + 250;
-    var randomY = Phaser.Math.Between(200, config.height);
-    cloudToMove.y = randomY;
-    var randomForLayer = Phaser.Math.Between(0, config.height)
-    if(randomForLayer < config.height / 2)
-    {
-      cloudToMove.setDepth(10);
-    }else{
-      cloudToMove.setDepth(0);
-    }
-  }
-
+  
 
   //createEnemyTimer check
   checkCreateEnemyTimer(time){
     if(createEnemyTimer > time){
       createEnemyTimer = 0;
-      enemyTimerRandomizer = Phaser.Math.Between(7, 10);
+      enemyTimerRandomizer = Phaser.Math.Between(4, 6);
       this.createEnemies();
     }
     else{

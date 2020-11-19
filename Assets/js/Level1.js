@@ -1,8 +1,8 @@
 //create global variables
 var createEnemyTimer = 0;
-var enemyTimerRandomizer = Phaser.Math.Between(7, 10);
+var enemyTimerRandomizer = Phaser.Math.Between(4, 6);
 var createPowerUpTimer = 0;
-var PowerUpTimerRandomizer = Phaser.Math.Between (20, 40);
+var PowerUpTimerRandomizer = Phaser.Math.Between (10, 20);
 var score = 0;
 var playerDamage = 1500;
 var playerSpeed = 300;
@@ -329,7 +329,7 @@ class Level1 extends Phaser.Scene{
   checkCreateEnemyTimer(time){
     if(createEnemyTimer > time){
       createEnemyTimer = 0;
-      enemyTimerRandomizer = Phaser.Math.Between(7, 10);
+      enemyTimerRandomizer = Phaser.Math.Between(4, 6);
       this.createEnemies();
     }
     else{
@@ -340,7 +340,7 @@ class Level1 extends Phaser.Scene{
   checkCreatePowerUpTimer(time){
     if(createPowerUpTimer > time){
       createPowerUpTimer = 0;
-      PowerUpTimerRandomizer = Phaser.Math.Between(20,40);
+      PowerUpTimerRandomizer = Phaser.Math.Between(10,20);
       this.createPowerUp();
     }
     else{
