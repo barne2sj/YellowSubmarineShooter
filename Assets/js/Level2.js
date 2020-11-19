@@ -395,10 +395,10 @@ class Level2 extends Phaser.Scene{
   //check win and set boss health
   checkWinLevel2(){
     if (score >= 2000){
-      bossHealth = 1200;
-      bossMaxHealth = 1200;
-      //this.scene.start('Level2Boss');
-      console.log("level 2 win")
+      bossHealth = 5000;
+      bossMaxHealth = 5000;
+      this.scene.start('Level2Boss');
+      //console.log("level 2 win")
     }
   }
 

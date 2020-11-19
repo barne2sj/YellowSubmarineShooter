@@ -1,20 +1,17 @@
-class Level1Boss extends Phaser.Scene{
+class Level2Boss extends Phaser.Scene{
   constructor(){
-    super("Level1Boss");
+    super("Level2Boss");
 
   }
 
   preload(){
     //load background land and sky
-    this.load.image('skynight', 'assets/images/LoveUpper-night.png');
-    this.load.image('skyday', 'assets/images/LoveUpper.png');
+    this.load.image('waterNight', 'assets/images/waterNight.png');
+    this.load.image('waterDay', 'assets/images/waterDay.png');
     this.load.image('sunclear', 'assets/images/day-layer.png');
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
     this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
-    this.load.image('cloud1', 'assets/images/cloud1.png');
-    this.load.image('cloud2', 'assets/images/cloud2.png');
-    this.load.image('cloud3', 'assets/images/cloud3.png');
 
     //load submarine spritesheet
     this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
@@ -22,10 +19,10 @@ class Level1Boss extends Phaser.Scene{
       frameHeight: 144
     });
 
-    //load boss spritesheet
-    this.load.spritesheet("handBoss", "assets/images/HandBossSprite.png", {
-      frameWidth: 510,
-      frameHeight: 295
+    //load fish boss spritesheet
+    this.load.spritesheet("fishBoss", "assets/images/fishboss.png", {
+      frameWidth: 1394,
+      frameHeight: 655
     });
 
     // load submarine projectile spritesheet
@@ -46,16 +43,17 @@ class Level1Boss extends Phaser.Scene{
       frameHeight: 354
     });
 
-    // load hand boss Projectile spritesheet
-    this.load.spritesheet("handBossProjectile", "assets/images/HandSprite.png", {
-      frameWidth:292,
-      frameHeight:60
+    // load fish boss Projectile spritesheet
+    this.load.spritesheet("fishBossProjectile", "assets/images/FishBossProjectile.png", {
+      frameWidth:200,
+      frameHeight:60.5
     });
 
     //load pixelfont
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
 
   }
+
 
   create(){
     this.bossAttackTimer = 0;
@@ -79,8 +77,8 @@ class Level1Boss extends Phaser.Scene{
 
     //create hand boss animation
     this.anims.create({
-      key: "handBoss_anim",
-      frames: this.anims.generateFrameNumbers("handBoss"),
+      key: "fishBoss_anim",
+      frames: this.anims.generateFrameNumbers("fishBoss"),
       frameRate: 10,
       repeat: -1
     });
@@ -93,7 +91,7 @@ class Level1Boss extends Phaser.Scene{
       repeat:-1
     });
 
-    //create hand boss explosion animation
+    //create fish boss explosion animation
     this.anims.create({
       key: "bossExplosion_anim",
       frames: this.anims.generateFrameNumbers("bossExplosion"),
@@ -101,10 +99,10 @@ class Level1Boss extends Phaser.Scene{
       repeat: -1
     });
 
-    //create hand boss projectile animation
+    //create fish boss projectile animation
     this.anims.create({
-      key:"handBossProjectile_anim",
-      frames: this.anims.generateFrameNumbers("handBossProjectile"),
+      key:"fishBossProjectile_anim",
+      frames: this.anims.generateFrameNumbers("fishBossProjectile"),
       frameRate:20,
       repeat:-1
     });    
@@ -119,30 +117,20 @@ class Level1Boss extends Phaser.Scene{
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
     if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "waterDay");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
       } else{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
       }
     } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skynight");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "waterNight");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
       } else{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
       }
     }
-    //create cloud images
-    this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
-    this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
-    this.cloudImage3 = this.add.sprite(config.width + 250, config.height/2 - 200, "cloud3");
-    //create cloud group
-    this.clouds = this.physics.add.group();
-    //add clouds to group
-    this.clouds.add(this.cloudImage1);
-    this.clouds.add(this.cloudImage2);
-    this.clouds.add(this.cloudImage2);
 
     //create the submarine
     this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
@@ -150,11 +138,11 @@ class Level1Boss extends Phaser.Scene{
     //play submarine animation
     this.submarine.play("submarine");
 
-    //create boss
-    this.handBoss = this.physics.add.sprite(config.width -250, config.height - 150, "handBoss");
+    //create fish boss
+    this.fishBoss = this.physics.add.sprite(config.width -250, config.height - 150, "fishBoss");
 
-    //play hand boss animation
-    this.handBoss.play("handBoss_anim");
+    //play fish boss animation
+    this.fishBoss.play("fishBoss_anim");
 
     //set world bounds on submarine
     this.submarine.setCollideWorldBounds(true);
@@ -209,10 +197,10 @@ class Level1Boss extends Phaser.Scene{
     this.bossProjectiles = this.add.group();
 
     //enemy and projectile overlap
-    this.physics.add.overlap(this.projectiles, this.handBoss, this.hurtBoss, null, this);
+    this.physics.add.overlap(this.projectiles, this.fishBoss, this.hurtBoss, null, this);
 
     //enemy and player overlap
-    this.physics.add.overlap(this.submarine, this.handBoss, this.crashDamage, null, this);
+    this.physics.add.overlap(this.submarine, this.fishBoss, this.crashDamage, null, this);
 
     //enemy projectile and player overlap
     this.physics.add.overlap(this.submarine, this.bossProjectiles, this.playerHit, null, this);
@@ -244,26 +232,22 @@ class Level1Boss extends Phaser.Scene{
       bossProjectile.update();
     }
 
-    //move clouds across screen
-    this.moveCloud(this.cloudImage1);
-    if(this.cloudImage1.x < (config.width * 0.75) || this.cloudImage2.x < config.width){
-      this.moveCloud(this.cloudImage2);
-    }
-    if(this.cloudImage2.x < (config.width * 0.75) || this.cloudImage3.x < config.width){
-      this.moveCloud(this.cloudImage3);
-    }
-
     //check boss jump timer
-    this.checkBossJumpTimer(this.handBoss, this.bossHPLabel, this.bossHPGraphics);
+    this.checkBossJumpTimer(this.fishBoss, this.bossHPLabel, this.bossHPGraphics);
 
     //check boss attack timer
     this.checkBossAttackTimer();
 
   }
+
   //boss attack timer
   checkBossAttackTimer(){
     if(this.bossAttackTimer > 180){
-      var bossProjectile = new handBossProjectile(this, this.handBoss.x - 300, this.handBoss.y - 20);
+      var bossProjectileStraight = new fishBossProjectile(this, this.fishBoss.x - 300, this.fishBoss.y - 20);
+      var bossProjectileUp = new fishBossProjectile(this, this.fishBoss.x - 300, this.fishBoss.y - 20);
+      var bossProjectileDown = new fishBossProjectile(this, this.fishBoss.x - 300, this.fishBoss.y - 20);
+      bossProjectileDown.body.velocity.y =150;
+      bossProjectileUp.body.velocity.y = -150;
       this.bossAttackTimer = 0;
     }
     else{
@@ -273,22 +257,22 @@ class Level1Boss extends Phaser.Scene{
   }
 
   //boss Jump timer
-  checkBossJumpTimer(handboss, hplabel, hpgraphics){
+  checkBossJumpTimer(fishboss, hplabel, hpgraphics){
     if(handBossJumpCount >= handBossJumpTimer){
       handBossJumpCount =0;
-      if(handboss.body.velocity.y == 0){
-        handboss.body.velocity.y -= 400;
+      if(fishboss.body.velocity.y == 0){
+        fishboss.body.velocity.y -= 400;
         hplabel.body.velocity.y -= 400;
         hpgraphics.body.velocity.y -= 400;
       }
-      else if(handboss.body.velocity.y == 400){
-        handboss.body.velocity.y -= 400;
+      else if(fishboss.body.velocity.y == 400){
+        fishboss.body.velocity.y -= 400;
         hplabel.body.velocity.y -= 400;
         hpgraphics.body.velocity.y -= 400;
         handBossJumpTimer = Phaser.Math.Between(20, 100);
       }
       else{
-        handboss.body.velocity.y += 800;
+        fishboss.body.velocity.y += 800;
         hplabel.body.velocity.y += 800;
         hpgraphics.body.velocity.y += 800;
       }
@@ -296,47 +280,27 @@ class Level1Boss extends Phaser.Scene{
     else{handBossJumpCount++}
   }
 
-  //move cloud
-  moveCloud(cloudToMove){
-    cloudToMove.x -= 5;
-    if(cloudToMove.x < 0)
-    {
-      this.resetCloud(cloudToMove);
-    }
-  }
-  // reset cloud
-  resetCloud(cloudToMove){
-    cloudToMove.x = config.width + 250;
-    var randomY = Phaser.Math.Between(200, config.height);
-    cloudToMove.y = randomY;
-    var randomForLayer = Phaser.Math.Between(0, config.height)
-    if(randomForLayer < config.height / 2)
-    {
-      cloudToMove.setDepth(10);
-    }else{
-      cloudToMove.setDepth(0);
-    }
-  }
-  //shoot submarine projectile
-  shootSubmarineProjectile(){
+   //shoot submarine projectile
+   shootSubmarineProjectile(){
     var SubmarineProjectile = new SubmarineProjectiles(this);
   }
 
   //projectile & enemy collision
-  hurtBoss(projectiles, handBoss) {
+  hurtBoss(projectiles, fishBoss) {
     bossHealth -= playerDamage;
     projectiles.destroy();
     this.bossHPLabel.text = "HP:" + bossHealth + "/" + bossMaxHealth;
     if (bossHealth<= 0){
       score += bossMaxHealth;
-      handBoss.destroy();
-      this.scene.start('Level2');
+      fishBoss.destroy();
+      //this.scene.start('Level2');
+      console.log("You win level 2");
     }
   }
 
   //player hit by enemy projectile
   playerHit(submarine, bossProjectiles){
-    playerHealth -=200;
+    playerHealth -=500;
     this.playerHealthLabel.text = "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
     bossProjectiles.destroy();
     if(playerHealth <= 0){
@@ -346,10 +310,10 @@ class Level1Boss extends Phaser.Scene{
   }
 
   //player hit boss
-  crashDamage(submarine, handBoss){
-    playerHealth -= handBoss.health;
+  crashDamage(submarine, fishBoss){
+    playerHealth -= fishBoss.health;
     this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
-    handBoss.destroy();
+    fishBoss.destroy();
     if (playerHealth <= 0){
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
       this.scene.start('deadScene', {transferScore: score});
@@ -405,9 +369,4 @@ class Level1Boss extends Phaser.Scene{
     }
 
   }
-
-
-
-
-
 }
