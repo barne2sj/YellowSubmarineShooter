@@ -28,7 +28,7 @@ class Level1 extends Phaser.Scene{
     this.load.image('sunclear', 'assets/images/day-layer.png');
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
+    this.load.image('mooncloudy', 'assets/images/night-layer-cloudy.png');
     this.load.image('cloud1', 'assets/images/cloud1.png');
     this.load.image('cloud2', 'assets/images/cloud2.png');
     this.load.image('cloud3', 'assets/images/cloud3.png');
@@ -123,7 +123,9 @@ class Level1 extends Phaser.Scene{
     });
 
     //create background sky and ground
-    var currentWeather = getWeather();
+    getWeather();
+    var currentWeather = weatherDescription;
+    alert(currentWeather);
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {
@@ -131,7 +133,7 @@ class Level1 extends Phaser.Scene{
     }
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
-    if(currentHour >= 6 && currentHour <= 20) {
+    if(currentHour >= 6 && currentHour <= 19) {
       this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');

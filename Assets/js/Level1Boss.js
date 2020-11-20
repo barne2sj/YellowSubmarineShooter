@@ -12,6 +12,7 @@ class Level1Boss extends Phaser.Scene{
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
     this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
+    this.load.image('lovelower', 'assets/images/LoveLower.png');
     this.load.image('cloud1', 'assets/images/cloud1.png');
     this.load.image('cloud2', 'assets/images/cloud2.png');
     this.load.image('cloud3', 'assets/images/cloud3.png');
@@ -133,6 +134,7 @@ class Level1Boss extends Phaser.Scene{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
       }
     }
+    
     //create cloud images
     this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
     this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
@@ -143,7 +145,7 @@ class Level1Boss extends Phaser.Scene{
     this.clouds.add(this.cloudImage1);
     this.clouds.add(this.cloudImage2);
     this.clouds.add(this.cloudImage2);
-
+    this.ground = this.add.tileSprite(960,540,config.width, config.height, 'lovelower');
     //create the submarine
     this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
 

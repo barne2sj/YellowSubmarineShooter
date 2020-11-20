@@ -1,6 +1,3 @@
-const weather = {};  
-var weatherSummary;
-var weatherDescription;
 var object;
 
 function getWeather(){
@@ -15,8 +12,8 @@ function getWeather(){
     //      else {
     //          // window.alert("Could not get location");
     //     }
-    //alert(weatherDescription);
-    return weatherDescription;
+    //dalert(weatherDescription);
+    //return weatherDescription;
 }
 
 function showWeather() {//lat, long) {
@@ -37,7 +34,7 @@ function showWeather() {//lat, long) {
     fetch(url)  
     .then(function(resp) { return resp.json() }) // Convert data to json
 	.then(function(data) {
-        alert(data.weather[0].main);
+        setWeatherValue(data.weather[0].main);
     }); // Call drawWeather  
    
   }

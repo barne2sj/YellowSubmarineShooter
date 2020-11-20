@@ -1,5 +1,6 @@
 var config;
 var game;
+var weatherDescription;
 
 var gameSettings = {
     restingSpeed: 0,
@@ -20,6 +21,7 @@ window.onload = function(){
             debug: false
         }
     }
+    
 }
 
 game = new Phaser.Game(config);
