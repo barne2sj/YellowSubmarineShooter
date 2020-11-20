@@ -15,6 +15,8 @@ var handBossJumpCount = 0;
 var levelMultiplier = 0;
 var currentWeather = '';
 
+
+//function for populating the weather variable
 (async function(){
   currentWeather = await getWeather();
 })();

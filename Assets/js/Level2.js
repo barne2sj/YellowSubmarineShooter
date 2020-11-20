@@ -1,3 +1,12 @@
+var currentWeather = '';
+
+
+//function for populating the weather variable
+(async function(){
+  currentWeather = await getWeather();
+})();
+
+
 class Level2 extends Phaser.Scene{
   constructor(){
     super("Level2");
