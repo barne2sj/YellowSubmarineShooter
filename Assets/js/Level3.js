@@ -1,38 +1,32 @@
-class Level1Boss extends Phaser.Scene{
+class Level3 extends Phaser.Scene{
   constructor(){
-    super("Level1Boss");
-
+    super("Level3");
   }
 
   preload(){
+    
     //load background land and sky
-    this.load.image('skynight', 'assets/images/LoveUpper-night.png');
-    this.load.image('skyday', 'assets/images/LoveUpper.png');
+    this.load.image('flowersNight', 'assets/images/flowersNight.png');
+    this.load.image('flowersDay', 'assets/images/flowersDay.png');
     this.load.image('sunclear', 'assets/images/day-layer.png');
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
-    this.load.image('lovelower', 'assets/images/LoveLower.png');
-    this.load.image('cloud1', 'assets/images/cloud1.png');
-    this.load.image('cloud2', 'assets/images/cloud2.png');
-    this.load.image('cloud3', 'assets/images/cloud3.png');
+    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');    
 
     //load submarine spritesheet
     this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
       frameWidth: 328,
       frameHeight: 144
     });
-
-    //load boss spritesheet
-    this.load.spritesheet("handBoss", "assets/images/HandBossSprite.png", {
-      frameWidth: 510,
-      frameHeight: 295
-    });
-
     // load submarine projectile spritesheet
     this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
       frameWidth:50,
       frameHeight:46
+    });
+    //load enemy 5 spritesheet
+    this.load.spritesheet("Enemy5", "assets/images/Enemy5.png", {
+      frameWidth: 421.5,
+      frameHeight: 250,
     });
 
     //load playerExplosion spritesheet
@@ -41,27 +35,26 @@ class Level1Boss extends Phaser.Scene{
       frameHeight: 296.5
     });
 
-    //load bossExplosion spritesheet
-    this.load.spritesheet("bossExplosion", "assets/images/BossExplosion.png", {
+    //load smallEnemyExplosion spritesheet
+    this.load.spritesheet("smallEnemyExplosion", "assets/images/smallEnemyExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });
 
-    // load hand boss Projectile spritesheet
-    this.load.spritesheet("handBossProjectile", "assets/images/HandSprite.png", {
-      frameWidth:292,
-      frameHeight:60
-    });
+    //load powerup images
+    this.load.image('PowerUp1', 'assets/images/PowerUp1.png');
+    this.load.image('PowerUp2', 'assets/images/PowerUp2.png');
+    this.load.image('PowerUp3', 'assets/images/PowerUp3.png');
 
     //load pixelfont
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
-
+    
   }
 
+
+
+
   create(){
-    this.bossAttackTimer = 0;
-
-
     //create submarine animation
     this.anims.create({
       key: "submarine",
@@ -69,7 +62,6 @@ class Level1Boss extends Phaser.Scene{
       frameRate: 10,
       repeat: -1
     });
-
     //create submarine projectile animation
     this.anims.create({
       key:"SubmarineProjectile_anim",
@@ -77,38 +69,30 @@ class Level1Boss extends Phaser.Scene{
       frameRate:20,
       repeat:-1
     });
-
-    //create hand boss animation
+    //create enemy 5 animation
     this.anims.create({
-      key: "handBoss_anim",
-      frames: this.anims.generateFrameNumbers("handBoss"),
-      frameRate: 10,
-      repeat: -1
+      key:"Enemy5_anim",
+      frames: this.anims.generateFrameNumbers("Enemy5"),
+      frameRate:1,
+      repeat:-1
     });
 
-    //create player explosion animation
+    //create player explosion anim
     this.anims.create({
-      key:"playerExplosion_anim",
+      key: "playerExplosion_anim",
       frames: this.anims.generateFrameNumbers("playerExplosion"),
-      frameRate:20,
-      repeat:-1
+      frameRate: 20,
+      repeat: 0,
+      hideOnComplete: true
     });
-
-    //create hand boss explosion animation
+    //create small enemy explosion anim
     this.anims.create({
-      key: "bossExplosion_anim",
-      frames: this.anims.generateFrameNumbers("bossExplosion"),
-      frameRate: 10,
-      repeat: -1
+      key: "smallEnemyExplosion_anim",
+      frames: this.anims.generateFrameNumbers("smallEnemyExplosion"),
+      frameRate: 20,
+      repeat: 0,
+      hideOnComplete: true
     });
-
-    //create hand boss projectile animation
-    this.anims.create({
-      key:"handBossProjectile_anim",
-      frames: this.anims.generateFrameNumbers("handBossProjectile"),
-      frameRate:20,
-      repeat:-1
-    });    
 
     //create background sky and ground
     var currentWeather = getWeather();
@@ -120,49 +104,34 @@ class Level1Boss extends Phaser.Scene{
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
     if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "flowersDay");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
       } else{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
       }
     } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skynight");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "flowersNight");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
       } else{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
       }
     }
-    
-    //create cloud images
-    this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
-    this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
-    this.cloudImage3 = this.add.sprite(config.width + 250, config.height/2 - 200, "cloud3");
-    //create cloud group
-    this.clouds = this.physics.add.group();
-    //add clouds to group
-    this.clouds.add(this.cloudImage1);
-    this.clouds.add(this.cloudImage2);
-    this.clouds.add(this.cloudImage2);
-    this.ground = this.add.tileSprite(960,540,config.width, config.height, 'lovelower');
+
+
     //create the submarine
     this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
 
     //play submarine animation
     this.submarine.play("submarine");
 
-    //create boss
-    this.handBoss = this.physics.add.sprite(config.width -250, config.height - 150, "handBoss");
-
-    //play hand boss animation
-    this.handBoss.play("handBoss_anim");
-
     //set world bounds on submarine
     this.submarine.setCollideWorldBounds(true);
 
     //set world bounds
     this.physics.world.setBoundsCollision();
+
 
     //add keys
     this.shoot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -189,41 +158,36 @@ class Level1Boss extends Phaser.Scene{
     this.speedLabel = this.add.bitmapText(1100, 5, "pixelFont", "PlayerSpeed: " + playerSpeed, 50);
     this.damageLabel = this.add.bitmapText(1500, 5, "pixelFont", "PlayerDamage: " + playerDamage, 50);
 
-    //boss health graphics
-    this.bossHPGraphics = this.add.graphics();
-    this.bossHPGraphics.fillStyle(0x000000, 1);
-    this.bossHPGraphics.beginPath();
-    this.bossHPGraphics.moveTo(1600, 775);
-    this.bossHPGraphics.lineTo(1850, 775);
-    this.bossHPGraphics.lineTo(1850, 825);
-    this.bossHPGraphics.lineTo(1600, 825);
-    this.bossHPGraphics.lineTo(1600, 775);
-    this.bossHPGraphics.closePath();
-    this.bossHPGraphics.fillPath();
-    this.bossHPLabel = this.add.bitmapText(1610, 780, "pixelFont", "HP:" + bossHealth + "/" + bossMaxHealth, 50);
-
-    this.physics.world.enableBody(this.bossHPGraphics);
-    this.physics.world.enableBody(this.bossHPLabel);
     //create a projectiles group
-    this.projectiles = this.add.group();  
-    
-    //create boss projectile group
-    this.bossProjectiles = this.add.group();
+    this.projectiles = this.add.group();
+
+    //create enemies group
+    this.enemies = this.add.group();
+
+    //create powerup groups
+    this.PowerUps1 = this.add.group();
+    this.PowerUps2 = this.add.group();
+    this.PowerUps3 = this.add.group();
 
     //enemy and projectile overlap
-    this.physics.add.overlap(this.projectiles, this.handBoss, this.hurtBoss, null, this);
+    this.physics.add.overlap(this.projectiles, this.enemies, this.hurtEnemy, null, this);
 
     //enemy and player overlap
-    this.physics.add.overlap(this.submarine, this.handBoss, this.crashDamage, null, this);
+    this.physics.add.overlap(this.submarine, this.enemies, this.crashDamage, null, this);
 
-    //enemy projectile and player overlap
-    this.physics.add.overlap(this.submarine, this.bossProjectiles, this.playerHit, null, this);
+    //player collision with power ups
+    this.physics.add.overlap(this.submarine, this.PowerUps1, this.HealthUp, null, this);
+    this.physics.add.overlap(this.submarine, this.PowerUps2, this.DamageUp, null, this);
+    this.physics.add.overlap(this.submarine, this.PowerUps3, this.SpeedUp, null, this);
 
     //set depth of submarine
     this.submarine.setDepth(5);
+    levelMultiplier = 5;
   }
 
-  update(){
+
+  update ()
+  { 
     //moves background sky and ground
     this.skyTile.tilePositionX +=1.0;
 
@@ -231,6 +195,12 @@ class Level1Boss extends Phaser.Scene{
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
         this.shootSubmarineProjectile();
     }
+    
+    //create enemy
+    this.checkCreateEnemyTimer(enemyTimerRandomizer);
+
+    //create powerups
+    this.checkCreatePowerUpTimer(PowerUpTimerRandomizer);
 
     //Checks for player movement
     this.movePlayerManager();
@@ -241,119 +211,143 @@ class Level1Boss extends Phaser.Scene{
       SubmarineProjectile.update();
     }
 
-    for(var i = 0; i < this.bossProjectiles.getChildren().length; i++){
-      var bossProjectile = this.bossProjectiles.getChildren()[i];
-      bossProjectile.update();
+    //iterate through each element of enemies group
+    for(var i = 0; i < this.enemies.getChildren().length; i++){
+      var Enemy = this.enemies.getChildren()[i];
+      Enemy.update(); 
+      if(Enemy.update()%240 ==0){
+        if(Enemy.projectileNumber < 1){
+          var littleEnemyProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 1);
+        }
+        if(Enemy.projectileNumber >=1 && Enemy.projectileNumber <= 4){
+          var straightProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 2);
+          var upProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 3);
+          var downProjectile = new enemyProjectile(this, Enemy.x, Enemy.y, 4);
+        }
+        if(Enemy.projectileNumber > 4 && Enemy.projectileNumber <=5){
+          Enemy.body.velocity.x *=2;
+        }
+      }  
     }
 
-    //move clouds across screen
-    this.moveCloud(this.cloudImage1);
-    if(this.cloudImage1.x < (config.width * 0.75) || this.cloudImage2.x < config.width){
-      this.moveCloud(this.cloudImage2);
+    //iterate through PowerUps1 group
+    for(var i = 0; i < this.PowerUps1.getChildren().length; i++){
+      var thisPowerUp1 = this.PowerUps1.getChildren()[i];
+      thisPowerUp1.update();
     }
-    if(this.cloudImage2.x < (config.width * 0.75) || this.cloudImage3.x < config.width){
-      this.moveCloud(this.cloudImage3);
+    //iterate through PowerUps2 group
+    for(var i = 0; i < this.PowerUps2.getChildren().length; i++){
+      var thisPowerUp2 = this.PowerUps2.getChildren()[i];
+      thisPowerUp2.update();
     }
-
-    //check boss jump timer
-    this.checkBossJumpTimer(this.handBoss, this.bossHPLabel, this.bossHPGraphics);
-
-    //check boss attack timer
-    this.checkBossAttackTimer();
-
+    //iterate through PowerUps3 group
+    for(var i = 0; i < this.PowerUps3.getChildren().length; i++){
+      var thisPowerUp3 = this.PowerUps3.getChildren()[i];
+      thisPowerUp3.update();
+    }
+    
+    //check for level 1 complete
+    this.checkWinLevel2();
+  
   }
-  //boss attack timer
-  checkBossAttackTimer(){
-    if(this.bossAttackTimer > 180){
-      var bossProjectile = new handBossProjectile(this, this.handBoss.x - 300, this.handBoss.y - 20);
-      this.bossAttackTimer = 0;
+
+  
+  //createEnemyTimer check
+  checkCreateEnemyTimer(time){
+    if(createEnemyTimer > time){
+      createEnemyTimer = 0;
+      enemyTimerRandomizer = Phaser.Math.Between(4, 6);
+      this.createEnemies();
     }
     else{
-      this.bossAttackTimer++;
+      createEnemyTimer += 1/60;
     }
-
-  }
-
-  //boss Jump timer
-  checkBossJumpTimer(handboss, hplabel, hpgraphics){
-    if(handBossJumpCount >= handBossJumpTimer){
-      handBossJumpCount =0;
-      if(handboss.body.velocity.y == 0){
-        handboss.body.velocity.y -= 400;
-        hplabel.body.velocity.y -= 400;
-        hpgraphics.body.velocity.y -= 400;
-      }
-      else if(handboss.body.velocity.y == 400){
-        handboss.body.velocity.y -= 400;
-        hplabel.body.velocity.y -= 400;
-        hpgraphics.body.velocity.y -= 400;
-        handBossJumpTimer = Phaser.Math.Between(20, 100);
-      }
-      else{
-        handboss.body.velocity.y += 800;
-        hplabel.body.velocity.y += 800;
-        hpgraphics.body.velocity.y += 800;
-      }
-    }
-    else{handBossJumpCount++}
   }
 
-  //move cloud
-  moveCloud(cloudToMove){
-    cloudToMove.x -= 5;
-    if(cloudToMove.x < 0)
-    {
-      this.resetCloud(cloudToMove);
+  checkCreatePowerUpTimer(time){
+    if(createPowerUpTimer > time){
+      createPowerUpTimer = 0;
+      PowerUpTimerRandomizer = Phaser.Math.Between(20,40);
+      this.createPowerUp();
+    }
+    else{
+      createPowerUpTimer += 1/60;
     }
   }
-  // reset cloud
-  resetCloud(cloudToMove){
-    cloudToMove.x = config.width + 250;
-    var randomY = Phaser.Math.Between(200, config.height);
-    cloudToMove.y = randomY;
-    var randomForLayer = Phaser.Math.Between(0, config.height)
-    if(randomForLayer < config.height / 2)
-    {
-      cloudToMove.setDepth(10);
-    }else{
-      cloudToMove.setDepth(0);
-    }
-  }
-  //shoot submarine projectile
+  
   shootSubmarineProjectile(){
     var SubmarineProjectile = new SubmarineProjectiles(this);
   }
+  createEnemies(){
+    var enemyNumber = 5;
+    var Enemy = new Enemies(this, enemyNumber);
+  }
+
+  createPowerUp(){
+    var PowerUpNumber = Phaser.Math.Between(1, 100);
+    var PlayerPowerUp = new PowerUp(this, PowerUpNumber);
+    
+  }
 
   //projectile & enemy collision
-  hurtBoss(projectiles, handBoss) {
-    bossHealth -= playerDamage;
+  hurtEnemy(projectiles, enemies) {
+    enemies.health -= playerDamage;
     projectiles.destroy();
-    this.bossHPLabel.text = "HP:" + bossHealth + "/" + bossMaxHealth;
-    if (bossHealth<= 0){
-      score += bossMaxHealth;
-      handBoss.destroy();
-      this.scene.start('Level2');
+    if (enemies.health <= 0){
+      score += enemies.starthealth;
+      this.scoreLabel.text = "SCORE " + score;
+      enemies.destroy();
+      var smallEnemyExplosion = new smallEnemyExplosionClass(this, enemies.x, enemies.y);
+      projectiles.destroy();
     }
   }
 
-  //player hit by enemy projectile
-  playerHit(submarine, bossProjectiles){
-    playerHealth -=200;
-    this.playerHealthLabel.text = "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
-    bossProjectiles.destroy();
-    if(playerHealth <= 0){
-      var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
-      this.scene.start('deadScene', {transferScore: score});
-    }
-  }
-
-  //player hit boss
-  crashDamage(submarine, handBoss){
-    playerHealth -= handBoss.health;
+  crashDamage(submarine, enemies){
+    playerHealth -= enemies.health;
     this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+    enemies.destroy();
+    var smallEnemyExplosion = new smallEnemyExplosionClass(this, enemies.x, enemies.y);
     if (playerHealth <= 0){
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
       this.scene.start('deadScene', {transferScore: score});
+    }
+  }
+
+  //collisions with power ups
+  HealthUp(submarine, powerup1){
+    if (playerHealth < playerMaxHealth - 150){
+      playerHealth += 200;
+      playerMaxHealth +=50;
+      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+      powerup1.destroy();
+    }
+    else {
+      var healthDifference = playerMaxHealth - playerHealth;
+      playerMaxHealth +=50;
+      playerHealth += (healthDifference + 50);
+      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+      powerup1.destroy();
+    }
+  }
+
+  DamageUp(submarine, powerup2){
+    playerDamage +=50;
+    this.damageLabel.text = "PlayerDamage: " + playerDamage;
+    powerup2.destroy();
+  }
+
+  SpeedUp(submarine, powerup3){
+    playerSpeed += 100;
+    this.speedLabel.text = "PlayerSpeed: " + playerSpeed;
+    powerup3.destroy();
+  }
+  //check win and set boss health
+  checkWinLevel2(){
+    if (score >= 10000){
+      bossHealth = 20000;
+      bossMaxHealth = 20000;
+      this.scene.start('Level3Boss');
+      //console.log("level 3 win")
     }
   }
 
@@ -405,9 +399,6 @@ class Level1Boss extends Phaser.Scene{
     }
 
   }
-
-
-
-
+  
 
 }
