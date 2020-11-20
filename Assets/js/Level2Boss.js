@@ -79,7 +79,7 @@ class Level2Boss extends Phaser.Scene{
     this.anims.create({
       key: "fishBoss_anim",
       frames: this.anims.generateFrameNumbers("fishBoss"),
-      frameRate: 10,
+      frameRate: 2,
       repeat: -1
     });
 
