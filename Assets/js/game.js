@@ -6,6 +6,8 @@ var gameSettings = {
   }
 
 window.onload = function(){
+    //var wcall = new weatherCalls();
+    //getWeather();
     config = {
     width: 1920,
     height: 1080,
@@ -20,7 +22,7 @@ window.onload = function(){
             debug: false
         }
     }
-    
+   
 }
 
 game = new Phaser.Game(config);

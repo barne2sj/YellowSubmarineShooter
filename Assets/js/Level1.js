@@ -13,6 +13,7 @@ var bossMaxHealth = 0;
 var handBossJumpTimer = Phaser.Math.Between(20, 100);
 var handBossJumpCount = 0;
 var levelMultiplier = 0;
+var currentWeather;
 
 
 class Level1 extends Phaser.Scene{
@@ -123,9 +124,8 @@ class Level1 extends Phaser.Scene{
     });
 
     //create background sky and ground
-    var wcall = new weatherCalls();
-    await wcall.getWeather();
-    var currentWeather = weatherDescription;
+
+    getWeather();
     console.log(currentWeather);
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
@@ -305,6 +305,8 @@ class Level1 extends Phaser.Scene{
     
   }
 
+
+
   //move cloud
   moveCloud(cloudToMove){
     cloudToMove.x -= 5;
@@ -483,6 +485,11 @@ class Level1 extends Phaser.Scene{
     }
 
   }
-  
 
+
+
+}
+
+function setCurrentWeather(weatherPassed) {
+  currentWeather = weatherPassed;
 }
