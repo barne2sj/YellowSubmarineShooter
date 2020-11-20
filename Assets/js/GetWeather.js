@@ -34,7 +34,7 @@ function showWeather() {//lat, long) {
     fetch(url)  
     .then(function(resp) { return resp.json() }) // Convert data to json
 	.then(function(data) {
-        setWeatherValue(data.weather[0].main);
+        this.setWeatherValue(data.weather[0].main);
     }); // Call drawWeather  
    
   }

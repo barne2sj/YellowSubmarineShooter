@@ -293,8 +293,7 @@ class Level2Boss extends Phaser.Scene{
     if (bossHealth<= 0){
       score += bossMaxHealth;
       fishBoss.destroy();
-      //this.scene.start('Level2');
-      console.log("You win level 2");
+      this.scene.start('Level3');
     }
   }
 
@@ -313,12 +312,10 @@ class Level2Boss extends Phaser.Scene{
   crashDamage(submarine, fishBoss){
     playerHealth -= fishBoss.health;
     this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
-    fishBoss.destroy();
     if (playerHealth <= 0){
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);
       this.scene.start('deadScene', {transferScore: score});
     }
-    else{console.log("boss dead");}
   }
 
   movePlayerManager(){

@@ -18,8 +18,8 @@ class Enemies extends Phaser.GameObjects.Sprite{
     this.projectileNumber = enemyNumber;
 
     this.body.velocity.x= -150;
-    this.health = 200 * levelMultiplier;
-    this.starthealth = 200 * levelMultiplier;
+    this.health = 300 * levelMultiplier;
+    this.starthealth = 300 * levelMultiplier;
 
     scene.enemies.add(this);
     }
@@ -67,18 +67,33 @@ class Enemies extends Phaser.GameObjects.Sprite{
   
       scene.enemies.add(this);
     }
+
+    if (enemyNumber > 4 && enemyNumber <=5){
+      super(scene, x, y, "Enemy5");
+      this.attackTimer = 0;
+      scene.add.existing(this);
+      this.play("Enemy5_anim");
+      scene.physics.world.enableBody(this);
+
+      this.projectileNumber = enemyNumber;
+
+      this.body.velocity.x= -150;
+      this.health = 200 * levelMultiplier;
+      this.starthealth = 200 * levelMultiplier;
+  
+      scene.enemies.add(this);
+    }
+
+
   }
   update(){
-    if(this.enemyNumber =1){
-      this.attackTimer ++;
-      if(this.x < -50){
+    
+    this.attackTimer++
+    if(this.x < -50){
       this.destroy();
-      }
-      return this.attackTimer;
-      //if (this.attackTimer %120 ==0){
-        //return this.attackTimer;
-      //}
     }
+    return this.attackTimer;
+    
   }
   getHP(){
     return this.health;

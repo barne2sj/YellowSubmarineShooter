@@ -4,10 +4,10 @@ var enemyTimerRandomizer = Phaser.Math.Between(4, 6);
 var createPowerUpTimer = 0;
 var PowerUpTimerRandomizer = Phaser.Math.Between (10, 20);
 var score = 0;
-var playerDamage = 1500;
+var playerDamage = 5000;
 var playerSpeed = 300;
-var playerHealth = 1500;
-var playerMaxHealth = 1500;
+var playerHealth = 50000;
+var playerMaxHealth = 50000;
 var bossHealth = 0;
 var bossMaxHealth = 0;
 var handBossJumpTimer = Phaser.Math.Between(20, 100);
@@ -125,7 +125,7 @@ class Level1 extends Phaser.Scene{
     //create background sky and ground
     getWeather();
     var currentWeather = weatherDescription;
-    alert(currentWeather);
+    console.log(currentWeather);
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {
