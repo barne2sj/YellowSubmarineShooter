@@ -123,7 +123,8 @@ class Level1 extends Phaser.Scene{
     });
 
     //create background sky and ground
-    getWeather();
+    var wcall = new weatherCalls();
+    await wcall.getWeather();
     var currentWeather = weatherDescription;
     alert(currentWeather);
     if(currentWeather != 'Clear' && currentWeather != ''){
