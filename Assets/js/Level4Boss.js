@@ -1,12 +1,3 @@
-var currentWeather = '';
-
-
-//function for populating the weather variable
-(async function(){
-  currentWeather = await getWeather();
-})();
-
-
 class Level4Boss extends Phaser.Scene{
   constructor(){
     super("Level4Boss");
@@ -29,8 +20,8 @@ class Level4Boss extends Phaser.Scene{
 
     //load piano boss spritesheet
     this.load.spritesheet("PianoBoss", "assets/images/PianoBoss.png", {
-      frameWidth: 954,
-      frameHeight: 971
+      frameWidth: 460,
+      frameHeight: 468
     });
 
     // load submarine projectile spritesheet
@@ -133,7 +124,6 @@ class Level4Boss extends Phaser.Scene{
     });
 
     //create background sky and ground
-    var currentWeather = getWeather();
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {

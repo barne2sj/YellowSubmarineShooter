@@ -1,12 +1,3 @@
-var currentWeather = '';
-
-
-//function for populating the weather variable
-(async function(){
-  currentWeather = await getWeather();
-})();
-
-
 class Level1Boss extends Phaser.Scene{
   constructor(){
     super("Level1Boss");
@@ -120,7 +111,6 @@ class Level1Boss extends Phaser.Scene{
     });    
 
     //create background sky and ground
-    var currentWeather = getWeather();
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {

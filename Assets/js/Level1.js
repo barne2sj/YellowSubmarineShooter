@@ -13,15 +13,6 @@ var bossMaxHealth = 0;
 var handBossJumpTimer = Phaser.Math.Between(20, 100);
 var handBossJumpCount = 0;
 var levelMultiplier = 0;
-var currentWeather = '';
-
-
-//function for populating the weather variable
-(async function(){
-  currentWeather = await getWeather();
-})();
-
-
 
 class Level1 extends Phaser.Scene{
   constructor(){
@@ -131,9 +122,6 @@ class Level1 extends Phaser.Scene{
     });
 
     //create background sky and ground
-
-    // getWeather();
-    console.log(currentWeather);
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {

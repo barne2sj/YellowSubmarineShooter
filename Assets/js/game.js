@@ -1,5 +1,6 @@
 var config;
 var game;
+var currentWeather;
 
 var gameSettings = {
     restingSpeed: 0,

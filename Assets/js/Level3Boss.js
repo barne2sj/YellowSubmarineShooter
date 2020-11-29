@@ -1,12 +1,3 @@
-var currentWeather = '';
-
-
-//function for populating the weather variable
-(async function(){
-  currentWeather = await getWeather();
-})();
-
-
 class Level3Boss extends Phaser.Scene{
   constructor(){
     super("Level3Boss");
@@ -54,7 +45,7 @@ class Level3Boss extends Phaser.Scene{
     // load turtle boss Projectile spritesheet
     this.load.spritesheet("turtleBossProjectile", "assets/images/TurtleProjectile.png", {
       frameWidth:253,
-      frameHeight:69
+      frameHeight:138
     });
 
     //load pixelfont
@@ -118,7 +109,6 @@ class Level3Boss extends Phaser.Scene{
     });    
 
     //create background sky and ground
-    var currentWeather = getWeather();
     if(currentWeather != 'Clear' && currentWeather != ''){
       currentWeather = 'Cloudy';
     } else {
