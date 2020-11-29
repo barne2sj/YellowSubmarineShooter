@@ -24,72 +24,33 @@ class Level1 extends Phaser.Scene{
     //load background land and sky
     this.load.image('skynight', 'assets/images/LoveUpper-night.png');
     this.load.image('skyday', 'assets/images/LoveUpper.png');
-    this.load.image('sunclear', 'assets/images/day-layer.png');
-    this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
-    this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('mooncloudy', 'assets/images/night-layer-cloudy.png');
+
     this.load.image('cloud1', 'assets/images/cloud1.png');
     this.load.image('cloud2', 'assets/images/cloud2.png');
     this.load.image('cloud3', 'assets/images/cloud3.png');
     
 
-    //load submarine spritesheet
-    this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
-      frameWidth: 328,
-      frameHeight: 144
-    });
-    // load submarine projectile spritesheet
-    this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
-      frameWidth:50,
-      frameHeight:46
-    });
+    //load submarine and repeatable stuff
+    loadReusedSprites(this);
+
     //load enemy 1 spritesheet
     this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
       frameWidth: 224,
       frameHeight: 175,
     });
 
-    //load playerExplosion spritesheet
-    this.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
-      frameWidth: 350,
-      frameHeight: 296.5
-    });
-
-    //load smallEnemyExplosion spritesheet
-    this.load.spritesheet("smallEnemyExplosion", "assets/images/smallEnemyExplosion.png", {
-      frameWidth: 418,
-      frameHeight: 354
-    });
     // load enemy1Projectile spritesheet
     this.load.spritesheet("enemy1Projectile", "assets/images/arrowsprite.png", {
       frameWidth:135,
       frameHeight:26
     });
 
-    //load powerup images
-    this.load.image('PowerUp1', 'assets/images/PowerUp1.png');
-    this.load.image('PowerUp2', 'assets/images/PowerUp2.png');
-    this.load.image('PowerUp3', 'assets/images/PowerUp3.png');
-
     //load pixelfont
     this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
     
   }
   create(){
-    //create submarine animation
-    this.anims.create({
-      key: "submarine",
-      frames: this.anims.generateFrameNumbers("yellowsubmarine"),
-      frameRate: 10,
-      repeat: -1
-    });
-    //create submarine projectile animation
-    this.anims.create({
-      key:"SubmarineProjectile_anim",
-      frames: this.anims.generateFrameNumbers("SubmarineProjectile"),
-      frameRate:20,
-      repeat:-1
-    });
+    createSprites(this);
     //create enemy 1 animation
     this.anims.create({
       key:"Enemy1_anim",
@@ -97,22 +58,7 @@ class Level1 extends Phaser.Scene{
       frameRate:1,
       repeat:-1
     });
-    //create player explosion anim
-    this.anims.create({
-      key: "playerExplosion_anim",
-      frames: this.anims.generateFrameNumbers("playerExplosion"),
-      frameRate: 20,
-      repeat: 0,
-      hideOnComplete: true
-    });
-    //create small enemy explosion anim
-    this.anims.create({
-      key: "smallEnemyExplosion_anim",
-      frames: this.anims.generateFrameNumbers("smallEnemyExplosion"),
-      frameRate: 20,
-      repeat: 0,
-      hideOnComplete: true
-    });
+
     //create enemy1Projectile animation
     this.anims.create({
       key:"enemy1Projectile_anim",
@@ -121,30 +67,9 @@ class Level1 extends Phaser.Scene{
       repeat:-1
     });
 
-    //create background sky and ground
-    if(currentWeather != 'Clear' && currentWeather != ''){
-      currentWeather = 'Cloudy';
-    } else {
-      currentWeather = 'Clear';
-    }
-    var currentDate = new Date();
-    var currentHour = currentDate.getHours();
-    if(currentHour >= 6 && currentHour <= 19) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
-      }
-    } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skynight");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
-      }
-    }
-
+    //Run Load Weather function
+    loadWeather(this, 'skyday', 'skynight');
+ 
     this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
     this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
     this.cloudImage3 = this.add.sprite(config.width + 250, config.height/2 - 200, "cloud3");
