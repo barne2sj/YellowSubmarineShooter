@@ -331,7 +331,7 @@ class Level2 extends Phaser.Scene{
   }
   createEnemies(){
     var enemyNumber = Phaser.Math.Between(1, 4);
-    var Enemy = new Enemies(this, enemyNumber);
+    var Enemy = new Enemies(this, enemyNumber, levelMultiplier);
   }
 
   createPowerUp(){

@@ -7,15 +7,15 @@ var currentWeather = '';
 })();
 
 
-class Level3Boss extends Phaser.Scene{
+class Level4Boss extends Phaser.Scene{
   constructor(){
-    super("Level3Boss");
+    super("Level4Boss");
 
   }
   preload(){
     //load background land and sky
-    this.load.image('flowersNight', 'assets/images/flowersNight.png');
-    this.load.image('flowersDay', 'assets/images/flowersDay.png');
+    this.load.image('linesNight', 'assets/images/Lines-night-bkg.png');
+    this.load.image('linesDay', 'assets/images/LinesBackground.png');
     this.load.image('sunclear', 'assets/images/day-layer.png');
     this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
     this.load.image('moonclear', 'assets/images/night-layer.png');
@@ -27,10 +27,10 @@ class Level3Boss extends Phaser.Scene{
       frameHeight: 144
     });
 
-    //load turtle boss spritesheet
-    this.load.spritesheet("turtleBoss", "assets/images/turtleboss.png", {
-      frameWidth: 960,
-      frameHeight: 603
+    //load piano boss spritesheet
+    this.load.spritesheet("PianoBoss", "assets/images/PianoBoss.png", {
+      frameWidth: 954,
+      frameHeight: 971
     });
 
     // load submarine projectile spritesheet
@@ -51,8 +51,8 @@ class Level3Boss extends Phaser.Scene{
       frameHeight: 354
     });
 
-    // load turtle boss Projectile spritesheet
-    this.load.spritesheet("turtleBossProjectile", "assets/images/TurtleProjectile.png", {
+    // load piano boss Projectile spritesheet
+    this.load.spritesheet("PianoBossProjectile", "assets/images/NoteProjectile.png", {
       frameWidth:253,
       frameHeight:69
     });
@@ -85,10 +85,10 @@ class Level3Boss extends Phaser.Scene{
       repeat:-1
     });
 
-    //create hand boss animation
+    //create piano boss animation
     this.anims.create({
-      key: "turtleBoss_anim",
-      frames: this.anims.generateFrameNumbers("turtleBoss"),
+      key: "PianoBoss_anim",
+      frames: this.anims.generateFrameNumbers("PianoBoss"),
       frameRate: 2,
       repeat: -1
     });
@@ -109,11 +109,11 @@ class Level3Boss extends Phaser.Scene{
       repeat: -1
     });
 
-    //create fish boss projectile animation
+    //create piano boss projectile animation
     this.anims.create({
-      key:"turtleBossProjectile_anim",
-      frames: this.anims.generateFrameNumbers("turtleBossProjectile"),
-      frameRate:5,
+      key:"PianoBossProjectile_anim",
+      frames: this.anims.generateFrameNumbers("PianoBossProjectile"),
+      frameRate:60,
       repeat:-1
     });    
 
@@ -127,14 +127,14 @@ class Level3Boss extends Phaser.Scene{
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
     if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "flowersDay");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "linesDay");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
       } else{
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
       }
     } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "flowersNight");
+      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "linesNight");
       if(currentWeather == 'Clear'){
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
       } else{
@@ -148,11 +148,11 @@ class Level3Boss extends Phaser.Scene{
     //play submarine animation
     this.submarine.play("submarine");
 
-    //create turtle boss
-    this.turtleBoss = this.physics.add.sprite(config.width -250, config.height - 220, "turtleBoss");
+    //create piano boss
+    this.PianoBoss = this.physics.add.sprite(config.width -250, config.height - 220, "turtleBoss");
 
-    //play turtle boss animation
-    this.turtleBoss.play("turtleBoss_anim");
+    //play piano boss animation
+    this.PianoBoss.play("PianoBoss_anim");
 
     //set world bounds on submarine
     this.submarine.setCollideWorldBounds(true);
@@ -206,14 +206,17 @@ class Level3Boss extends Phaser.Scene{
     //create boss projectile group
     this.bossProjectiles = this.add.group();
 
+    //create note explosion group
+    this.noteExplosions = this.add.group();
+
     //enemy and projectile overlap
-    this.physics.add.overlap(this.projectiles, this.turtleBoss, this.hurtBoss, null, this);
+    this.physics.add.overlap(this.projectiles, this.PianoBoss, this.hurtBoss, null, this);
 
     //enemy and player overlap
-    this.physics.add.overlap(this.submarine, this.turtleBoss, this.crashDamage, null, this);
+    this.physics.add.overlap(this.submarine, this.PianoBoss, this.crashDamage, null, this);
 
-    //enemy projectile and player overlap
-    this.physics.add.overlap(this.submarine, this.bossProjectiles, this.playerHit, null, this);
+    //note explosions and player overlap
+    this.physics.add.overlap(this.submarine, this.noteExplosions, this.playerHit, null, this);
 
     //set depth of submarine
     this.submarine.setDepth(5);
@@ -236,14 +239,16 @@ class Level3Boss extends Phaser.Scene{
       var SubmarineProjectile = this.projectiles.getChildren()[i];
       SubmarineProjectile.update();
     }
-
+    
+    //iterate through boss projectile group
     for(var i = 0; i < this.bossProjectiles.getChildren().length; i++){
       var bossProjectile = this.bossProjectiles.getChildren()[i];
       bossProjectile.update();
     }
+    //iterate through note explosion group?
 
     //check boss jump timer
-    this.checkBossJumpTimer(this.turtleBoss, this.bossHPLabel, this.bossHPGraphics);
+    this.checkBossJumpTimer(this.PianoBoss, this.bossHPLabel, this.bossHPGraphics);
 
     //check boss attack timer
     this.checkBossAttackTimer();
@@ -253,7 +258,7 @@ class Level3Boss extends Phaser.Scene{
   //boss attack timer
   checkBossAttackTimer(){
     if(this.bossAttackTimer > 140){
-      var bossProjectile = new turtleBossProjectile(this, this.turtleBoss.x - 400, this.turtleBoss.y - 50, this.submarine.x, this.submarine.y);
+      var bossProjectile = new turtleBossProjectile(this, this.PianoBoss.x - 400, this.PianoBoss.y - 50, this.submarine.x, this.submarine.y);
       this.bossAttackTimer = 0;
     }
     else{
@@ -263,22 +268,22 @@ class Level3Boss extends Phaser.Scene{
   }
 
   //boss Jump timer
-  checkBossJumpTimer(turtleboss, hplabel, hpgraphics){
+  checkBossJumpTimer(Pianoboss, hplabel, hpgraphics){
     if(handBossJumpCount >= handBossJumpTimer){
       handBossJumpCount =0;
-      if(turtleboss.body.velocity.y == 0){
-        turtleboss.body.velocity.y -= 400;
+      if(Pianoboss.body.velocity.y == 0){
+        Pianoboss.body.velocity.y -= 400;
         hplabel.body.velocity.y -= 400;
         hpgraphics.body.velocity.y -= 400;
       }
-      else if(turtleboss.body.velocity.y == 400){
-        turtleboss.body.velocity.y -= 400;
+      else if(Pianoboss.body.velocity.y == 400){
+        Pianoboss.body.velocity.y -= 400;
         hplabel.body.velocity.y -= 400;
         hpgraphics.body.velocity.y -= 400;
         handBossJumpTimer = Phaser.Math.Between(20, 100);
       }
       else{
-        turtleboss.body.velocity.y += 800;
+        Pianoboss.body.velocity.y += 800;
         hplabel.body.velocity.y += 800;
         hpgraphics.body.velocity.y += 800;
       }
@@ -292,13 +297,13 @@ class Level3Boss extends Phaser.Scene{
   }
 
   //projectile & enemy collision
-  hurtBoss(projectiles, turtleBoss) {
+  hurtBoss(projectiles, PianoBoss) {
     bossHealth -= playerDamage;
     projectiles.destroy();
     this.bossHPLabel.text = "HP:" + bossHealth + "/" + bossMaxHealth;
     if (bossHealth<= 0){
       score += bossMaxHealth;
-      turtleBoss.destroy();
+      PianoBoss.destroy();
       this.scene.start('Level4');
     }
   }
@@ -315,8 +320,8 @@ class Level3Boss extends Phaser.Scene{
   }
 
   //player hit boss
-  crashDamage(submarine, turtleBoss){
-    playerHealth -= turtleBoss.health;
+  crashDamage(submarine, PianoBoss){
+    playerHealth -= PianoBoss.health;
     this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
     if (playerHealth <= 0){
       var submarineExplosion = new playerExplosionClass(this, submarine.x, submarine.y);

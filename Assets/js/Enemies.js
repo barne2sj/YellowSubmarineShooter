@@ -1,5 +1,5 @@
 class Enemies extends Phaser.GameObjects.Sprite{
-  constructor(scene, enemyNumber){
+  constructor(scene, enemyNumber, levelMultiplier){
     var x = config.width;
     var y = Phaser.Math.Between(200, config.height - 200);
     var health;

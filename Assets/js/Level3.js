@@ -256,7 +256,7 @@ class Level3 extends Phaser.Scene{
     }
     
     //check for level 1 complete
-    this.checkWinLevel2();
+    this.checkWinLevel3();
   
   }
 
@@ -289,7 +289,7 @@ class Level3 extends Phaser.Scene{
   }
   createEnemies(){
     var enemyNumber = 5;
-    var Enemy = new Enemies(this, enemyNumber);
+    var Enemy = new Enemies(this, enemyNumber, levelMultiplier);
   }
 
   createPowerUp(){
@@ -351,7 +351,7 @@ class Level3 extends Phaser.Scene{
     powerup3.destroy();
   }
   //check win and set boss health
-  checkWinLevel2(){
+  checkWinLevel3(){
     if (score >= 10000){
       bossHealth = 20000;
       bossMaxHealth = 20000;
