@@ -4,11 +4,11 @@ class Level4 extends Phaser.Scene{
   }
 
   preload(){
-    loadReusedSprites(this, null, null);
+    
     //load background land and sky
-    this.load.image('doorsNight', 'assets/images/doors-night-bkg.png');
-    this.load.image('doorsDay', 'assets/images/doors.png');   
-
+    this.load.image('foodNight', 'assets/images/food-night-bkg.png');
+    this.load.image('foodDay', 'assets/images/food1.png');   
+    loadReusedSprites(this, 'Level4', true);
     //load enemy 1 spritesheet
     this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
       frameWidth: 224,
@@ -104,7 +104,7 @@ class Level4 extends Phaser.Scene{
       repeat:-1
     });
 
-    loadWeather(this, 'doorsDay', 'doorsNight', null, false);
+    loadWeather(this, 'foodDay', 'foodNight', 'Level4', true);
 
     //Score graphics
     var graphics = this.add.graphics();
@@ -159,6 +159,7 @@ class Level4 extends Phaser.Scene{
   { 
     //moves background sky and ground
     this.skyTile.tilePositionX +=1.0;
+    this.ground.tilePositionX += 1.0;
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){

@@ -10,8 +10,8 @@ class Level4Boss extends Phaser.Scene{
     
     //load piano boss spritesheet
     this.load.spritesheet("PianoBoss", "assets/images/PianoBoss.png", {
-      frameWidth: 460,
-      frameHeight: 468
+      frameWidth: 319,
+      frameHeight: 500
     });
 
     //load bossExplosion spritesheet
@@ -191,6 +191,9 @@ class Level4Boss extends Phaser.Scene{
 
   //boss Jump timer
   checkBossJumpTimer(Pianoboss, hplabel, hpgraphics){
+    if(Pianoboss == null){
+      return;
+    }
     if(handBossJumpCount >= handBossJumpTimer){
       handBossJumpCount =0;
       if(Pianoboss.body.velocity.y == 0){

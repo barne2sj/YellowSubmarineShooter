@@ -169,6 +169,9 @@ class Level2Boss extends Phaser.Scene{
 
   //boss Jump timer
   checkBossJumpTimer(fishboss, hplabel, hpgraphics){
+    if(fishboss == null){
+      return;
+    }
     if(handBossJumpCount >= handBossJumpTimer){
       handBossJumpCount =0;
       if(fishboss.body.velocity.y == 0){

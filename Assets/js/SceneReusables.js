@@ -35,6 +35,8 @@ function loadReusedSprites(scene, sceneName, includeForeground){
                 scene.load.image('lovelower', 'assets/images/LoveLower.png');
             } else if (sceneName == 'Level3' || sceneName == 'Level3Boss') {
                 scene.load.image('flowerFore', 'assets/images/flowersbackgroundFore.png');
+            }else if(sceneName == 'Level4') {
+                scene.load.image('foodFore', 'assets/images/Foodoverlay.png')
             }
         }
 }
@@ -127,6 +129,9 @@ function loadWeather(scene, dayImage, nightImage, sceneName, includeForeground){
             scene.ground = scene.add.tileSprite(960,540,config.width, config.height, 'lovelower');
         }else if(sceneName =='Level3' || sceneName == 'Level3Boss'){
             scene.ground = scene.add.tileSprite(960, 540, config.width, config.height, 'flowerFore');
+        } else if (sceneName == 'Level4') {
+            scene.ground = scene.add.tileSprite(960, 540, config.width, config.height, 'foodFore');
+            scene.ground.setDepth(100);
         }
     }
 }

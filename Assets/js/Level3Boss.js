@@ -164,6 +164,9 @@ class Level3Boss extends Phaser.Scene{
 
   //boss Jump timer
   checkBossJumpTimer(turtleboss, hplabel, hpgraphics){
+    if(turtleboss == null){
+      return;
+    }
     if(handBossJumpCount >= handBossJumpTimer){
       handBossJumpCount =0;
       if(turtleboss.body.velocity.y == 0){

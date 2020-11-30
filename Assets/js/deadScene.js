@@ -4,10 +4,10 @@ class deadScene extends Phaser.Scene{
     var playerScore; 
   }
 
-  function startGame(){
+  startGame(){
     document.getElementById('Level1').style.display = 'none';
   }
-  function replay(){
+  replay(){
     document.getElementById('deadScene').style.display = 'none';
     buttonGo.style.display = 'none';
     replayButton = 'replay';
@@ -17,11 +17,10 @@ class deadScene extends Phaser.Scene{
     deselctAll();
     location.reload();
   }
-  function go(){
+  go(){
     var textEndTitle = document.getElementById('textEndTitle');
     var textEndMessage = document.getElementById('textEndMessage');
-  }
-  if (points == 0) {
+    if (points == 0) {
     if(playerScore = 1000) {
       level = 'Level1Boss';
     }
@@ -64,3 +63,4 @@ class deadScene extends Phaser.Scene{
 
 
   //}
+}
