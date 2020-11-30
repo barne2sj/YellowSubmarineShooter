@@ -8,7 +8,7 @@ class Level3Boss extends Phaser.Scene{
     //load turtle boss spritesheet
     this.load.spritesheet("turtleBoss", "assets/images/turtleboss.png", {
       frameWidth: 960,
-      frameHeight: 603
+      frameHeight: 602
     });
 
     //load bossExplosion spritesheet
@@ -30,8 +30,6 @@ class Level3Boss extends Phaser.Scene{
 
   create(){
     this.bossAttackTimer = 0;
-
-
  
     //create turtle boss animation
     this.anims.create({
@@ -58,17 +56,17 @@ class Level3Boss extends Phaser.Scene{
       repeat:-1
     });    
 
+
+    
+    createSprites(this);
+    
+    loadWeather(this, 'flowersDay', 'flowersNight', 'Level3', true);
     //create turtle boss
     this.turtleBoss = this.physics.add.sprite(config.width -250, config.height - 220, "turtleBoss");
 
     //play turtle boss animation
     this.turtleBoss.play("turtleBoss_anim");
 
-    
-    createSprites(this);
-    
-    loadWeather(this, 'flowersDay', 'flowersNight', 'Level3', true);
-     
 
     //Score graphics
     var graphics = this.add.graphics();
