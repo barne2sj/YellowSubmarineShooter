@@ -5,36 +5,13 @@ class Level2Boss extends Phaser.Scene{
   }
 
   preload(){
-    //load background land and sky
-    this.load.image('waterNight', 'assets/images/waterNight.png');
-    this.load.image('waterDay', 'assets/images/waterDay.png');
-    this.load.image('sunclear', 'assets/images/day-layer.png');
-    this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
-    this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
 
-    //load submarine spritesheet
-    this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
-      frameWidth: 328,
-      frameHeight: 144
-    });
+    loadReusedSprites(this, null, null);
 
     //load fish boss spritesheet
     this.load.spritesheet("fishBoss", "assets/images/fishboss.png", {
       frameWidth: 1394,
       frameHeight: 655
-    });
-
-    // load submarine projectile spritesheet
-    this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
-      frameWidth:50,
-      frameHeight:46
-    });
-
-    //load playerExplosion spritesheet
-    this.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
-      frameWidth: 350,
-      frameHeight: 296.5
     });
 
     //load bossExplosion spritesheet
@@ -49,9 +26,6 @@ class Level2Boss extends Phaser.Scene{
       frameHeight:60.5
     });
 
-    //load pixelfont
-    this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
-
   }
 
 
@@ -59,23 +33,7 @@ class Level2Boss extends Phaser.Scene{
     this.bossAttackTimer = 0;
 
 
-    //create submarine animation
-    this.anims.create({
-      key: "submarine",
-      frames: this.anims.generateFrameNumbers("yellowsubmarine"),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    //create submarine projectile animation
-    this.anims.create({
-      key:"SubmarineProjectile_anim",
-      frames: this.anims.generateFrameNumbers("SubmarineProjectile"),
-      frameRate:20,
-      repeat:-1
-    });
-
-    //create hand boss animation
+    //create fish boss animation
     this.anims.create({
       key: "fishBoss_anim",
       frames: this.anims.generateFrameNumbers("fishBoss"),
@@ -83,13 +41,6 @@ class Level2Boss extends Phaser.Scene{
       repeat: -1
     });
 
-    //create player explosion animation
-    this.anims.create({
-      key:"playerExplosion_anim",
-      frames: this.anims.generateFrameNumbers("playerExplosion"),
-      frameRate:20,
-      repeat:-1
-    });
 
     //create fish boss explosion animation
     this.anims.create({
@@ -107,55 +58,16 @@ class Level2Boss extends Phaser.Scene{
       repeat:-1
     });    
 
-    //create background sky and ground
-    console.log(currentWeather);
-    if(currentWeather != 'Clear' && currentWeather != ''){
-      currentWeather = 'Cloudy';
-    } else {
-      currentWeather = 'Clear';
-    }
-    var currentDate = new Date();
-    var currentHour = currentDate.getHours();
-    if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "waterDay");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
-      }
-    } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "waterNight");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
-      }
-    }
-
-    //create the submarine
-    this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
-
-    //play submarine animation
-    this.submarine.play("submarine");
-
+    createSprites(this);
+    
+    loadWeather(this, 'waterDay', 'waterNight', null, false);
+     
+    
     //create fish boss
     this.fishBoss = this.physics.add.sprite(config.width -250, config.height - 150, "fishBoss");
 
     //play fish boss animation
     this.fishBoss.play("fishBoss_anim");
-
-    //set world bounds on submarine
-    this.submarine.setCollideWorldBounds(true);
-
-    //set world bounds
-    this.physics.world.setBoundsCollision();
-
-    //add keys
-    this.shoot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
     //Score graphics
     var graphics = this.add.graphics();
@@ -205,8 +117,7 @@ class Level2Boss extends Phaser.Scene{
     //enemy projectile and player overlap
     this.physics.add.overlap(this.submarine, this.bossProjectiles, this.playerHit, null, this);
 
-    //set depth of submarine
-    this.submarine.setDepth(5);
+
   }
 
   update(){
@@ -215,11 +126,11 @@ class Level2Boss extends Phaser.Scene{
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
-        this.shootSubmarineProjectile();
+        shootSubmarineProjectile(this);
     }
 
     //Checks for player movement
-    this.movePlayerManager();
+    movePlayerManager(this, this.submarine);
 
     //iterate through each element of projectile group
     for(var i = 0; i < this.projectiles.getChildren().length; i++){
@@ -318,52 +229,4 @@ class Level2Boss extends Phaser.Scene{
     }
   }
 
-  movePlayerManager(){
-    //move left
-    if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move up
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.y = -playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move down
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move up left
-    else if(this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move up right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move down left
-    else if (this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = -playerSpeed;
-    }
-    //move down right
-    else if (!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = playerSpeed;
-    }
-    //stop moving
-    else{
-      this.submarine.body.velocity.x = 0;
-      this.submarine.body.velocity.y=0;
-    }
-
-  }
 }

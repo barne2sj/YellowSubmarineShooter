@@ -1,4 +1,4 @@
-function loadReusedSprites(scene){
+function loadReusedSprites(scene, sceneName, includeForeground){
         //load submarine spritesheet
         scene.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
             frameWidth: 328,
@@ -27,6 +27,16 @@ function loadReusedSprites(scene){
         scene.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
         scene.load.image('moonclear', 'assets/images/night-layer.png');
         scene.load.image('mooncloudy', 'assets/images/night-layer-cloudy.png');
+
+        //load pixelfont
+        scene.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
+        if(includeForeground == true){
+            if(sceneName == 'Level1Boss'){
+                scene.load.image('lovelower', 'assets/images/LoveLower.png');
+            } else if (sceneName == 'Level3' || sceneName == 'Level3Boss') {
+                scene.load.image('flowerFore', 'assets/images/flowersbackgroundFore.png');
+            }
+        }
 }
 
 function createSprites(scene){
@@ -62,9 +72,33 @@ function createSprites(scene){
             repeat: 0,
             hideOnComplete: true
         });
+
+        
+
+        //create the submarine
+        scene.submarine = scene.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
+       
+        //play submarine animation
+        scene.submarine.play("submarine");
+
+        //set world bounds on submarine
+        scene.submarine.setCollideWorldBounds(true);
+
+        //set world bounds
+        scene.physics.world.setBoundsCollision();
+
+        //add keys
+        scene.shoot = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        scene.leftKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        scene.rightKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        scene.upKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        scene.downKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+        //set depth of submarine
+        scene.submarine.setDepth(5);
 }
 
-function loadWeather(scene, dayImage, nightImage){
+function loadWeather(scene, dayImage, nightImage, sceneName, includeForeground){
     //create background sky and ground
     if(currentWeather != 'Clear' && currentWeather != ''){
         currentWeather = 'Cloudy';
@@ -88,5 +122,78 @@ function loadWeather(scene, dayImage, nightImage){
             scene.celestialBody = scene.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
         }
     }
-  
+    if(includeForeground == true){
+        if(sceneName == 'Level1Boss'){
+            scene.ground = scene.add.tileSprite(960,540,config.width, config.height, 'lovelower');
+        }else if(sceneName =='Level3' || sceneName == 'Level3Boss'){
+            scene.ground = scene.add.tileSprite(960, 540, config.width, config.height, 'flowerFore');
+        }
+    }
 }
+function createPowerUp(scene){
+    var PowerUpNumber = Phaser.Math.Between(1, 100);
+    var PlayerPowerUp = new PowerUp(scene, PowerUpNumber);
+    //var PlayerPowerUp = new PowerUp(this, 25);
+  }
+
+ function shootSubmarineProjectile(scene){
+    var SubmarineProjectile = new SubmarineProjectiles(scene);
+  }
+
+  function movePlayerManager(scene, playerSubmarine){
+    //move left
+    if(scene.leftKey.isDown && !scene.rightKey.isDown && !scene.upKey.isDown && !scene.downKey.isDown){
+        playerSubmarine.body.velocity.x = -playerSpeed;
+        playerSubmarine.body.velocity.y=0;
+    }
+    //move right
+    else if(!scene.leftKey.isDown && scene.rightKey.isDown && !scene.upKey.isDown && !scene.downKey.isDown){
+        playerSubmarine.body.velocity.x = playerSpeed;
+        playerSubmarine.body.velocity.y=0;
+    }
+    //move up
+    else if (!scene.leftKey.isDown && !scene.rightKey.isDown && scene.upKey.isDown && !scene.downKey.isDown){
+        playerSubmarine.body.velocity.y = -playerSpeed;
+        playerSubmarine.body.velocity.x = 0;
+    }
+    //move down
+    else if (!scene.leftKey.isDown && !scene.rightKey.isDown && !scene.upKey.isDown && scene.downKey.isDown){
+        playerSubmarine.body.velocity.y = playerSpeed;
+        playerSubmarine.body.velocity.x = 0;
+    }
+    //move up left
+    else if(scene.leftKey.isDown && !scene.rightKey.isDown && scene.upKey.isDown && !scene.downKey.isDown){
+        playerSubmarine.body.velocity.x = -playerSpeed;
+        playerSubmarine.body.velocity.y = -playerSpeed;
+    }
+    //move up right
+    else if(!scene.leftKey.isDown && scene.rightKey.isDown && scene.upKey.isDown && !scene.downKey.isDown){
+        playerSubmarine.body.velocity.x = playerSpeed;
+        playerSubmarine.body.velocity.y = -playerSpeed;
+    }
+    //move down left
+    else if (scene.leftKey.isDown && !scene.rightKey.isDown && !scene.upKey.isDown && scene.downKey.isDown){
+        playerSubmarine.body.velocity.y = playerSpeed;
+        playerSubmarine.body.velocity.x = -playerSpeed;
+    }
+    //move down right
+    else if (!scene.leftKey.isDown && scene.rightKey.isDown && !scene.upKey.isDown && scene.downKey.isDown){
+        playerSubmarine.body.velocity.y = playerSpeed;
+        playerSubmarine.body.velocity.x = playerSpeed;
+    }
+    //stop moving
+    else{
+        playerSubmarine.body.velocity.x = 0;
+        playerSubmarine.body.velocity.y=0;
+    }
+
+  }
+
+  function checkWinLevel(currentScene, maxScore, newBossHealth, newBossMaxHealth, newScene){
+    if (score >= maxScore){
+      bossHealth = newBossHealth;
+      bossMaxHealth = newBossMaxHealth;
+      currentScene.scene.start(newScene);
+    }
+  }
+  

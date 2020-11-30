@@ -31,7 +31,7 @@ class Level1 extends Phaser.Scene{
     
 
     //load submarine and repeatable stuff
-    loadReusedSprites(this);
+    loadReusedSprites(this, null, null);
 
     //load enemy 1 spritesheet
     this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
@@ -68,7 +68,7 @@ class Level1 extends Phaser.Scene{
     });
 
     //Run Load Weather function
-    loadWeather(this, 'skyday', 'skynight');
+    loadWeather(this, 'skyday', 'skynight', false, null);
  
     this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
     this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
@@ -81,44 +81,6 @@ class Level1 extends Phaser.Scene{
     this.clouds.add(this.cloudImage2);
 
     //this.groundTile = this.add.tileSprite(960,540,config.width, config.height, "land");
-
-    //create the submarine
-    this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
-
-    //play submarine animation
-    this.submarine.play("submarine");
-
-    //set world bounds on submarine
-    this.submarine.setCollideWorldBounds(true);
-
-    //set world bounds
-    this.physics.world.setBoundsCollision();
-
-
-    //add keys
-    this.shoot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-
-    //Score graphics
-    var graphics = this.add.graphics();
-    graphics.fillStyle(0x000000, 1);
-    graphics.beginPath();
-    graphics.moveTo(0,0);
-    graphics.lineTo(config.width, 0);
-    graphics.lineTo(config.width, 80);
-    graphics.lineTo(0, 80);
-    graphics.lineTo(0, 0);
-    graphics.closePath();
-    graphics.fillPath();
-
-    // add top label
-    this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE: " + score, 50);
-    this.playerHealthLabel = this.add.bitmapText(600, 5, "pixelFont", "PlayerHealth: " + playerHealth + "/" + playerMaxHealth, 50)
-    this.speedLabel = this.add.bitmapText(1100, 5, "pixelFont", "PlayerSpeed: " + playerSpeed, 50);
-    this.damageLabel = this.add.bitmapText(1500, 5, "pixelFont", "PlayerDamage: " + playerDamage, 50);
 
     //create a projectiles group
     this.projectiles = this.add.group();
@@ -148,10 +110,26 @@ class Level1 extends Phaser.Scene{
     this.physics.add.overlap(this.submarine, this.PowerUps2, this.DamageUp, null, this);
     this.physics.add.overlap(this.submarine, this.PowerUps3, this.SpeedUp, null, this);
 
-    //set depth of submarine
-    this.submarine.setDepth(5);
-
     levelMultiplier = 1;
+
+    //Score graphics
+    var graphics = this.add.graphics();
+    graphics.fillStyle(0x000000, 1);
+    graphics.beginPath();
+    graphics.moveTo(0,0);
+    graphics.lineTo(config.width, 0);
+    graphics.lineTo(config.width, 80);
+    graphics.lineTo(0, 80);
+    graphics.lineTo(0, 0);
+    graphics.closePath();
+    graphics.fillPath();
+
+    // add top label
+    this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE: " + score, 50);
+    this.playerHealthLabel = this.add.bitmapText(600, 5, "pixelFont", "PlayerHealth: " + playerHealth + "/" + playerMaxHealth, 50)
+    this.speedLabel = this.add.bitmapText(1100, 5, "pixelFont", "PlayerSpeed: " + playerSpeed, 50);
+    this.damageLabel = this.add.bitmapText(1500, 5, "pixelFont", "PlayerDamage: " + playerDamage, 50);
+
   }
 
   update ()
@@ -161,7 +139,7 @@ class Level1 extends Phaser.Scene{
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
-        this.shootSubmarineProjectile();
+        shootSubmarineProjectile(this);
     }
     
     //create enemy
@@ -169,7 +147,7 @@ class Level1 extends Phaser.Scene{
     this.checkCreatePowerUpTimer(PowerUpTimerRandomizer);
 
     //Checks for player movement
-    this.movePlayerManager();
+    movePlayerManager(this, this.submarine);
 
     //iterate through each element of projectile group
     for(var i = 0; i < this.projectiles.getChildren().length; i++){
@@ -211,7 +189,7 @@ class Level1 extends Phaser.Scene{
     }
     
     //check for level 1 complete
-    this.checkWinLevel1();
+    checkWinLevel(this, 200, 1200, 1200, 'Level1Boss');
 
     //move clouds across screen
     this.moveCloud(this.cloudImage1);
@@ -249,6 +227,16 @@ class Level1 extends Phaser.Scene{
     }
   }
 
+  checkCreatePowerUpTimer(time){
+    if(createPowerUpTimer > time){
+      createPowerUpTimer = 0;
+      PowerUpTimerRandomizer = Phaser.Math.Between(20,40);
+      createPowerUp(this);
+    }
+    else{
+      createPowerUpTimer += 1/60;
+    }
+  }
 
   //createEnemyTimer check
   checkCreateEnemyTimer(time){
@@ -262,30 +250,39 @@ class Level1 extends Phaser.Scene{
     }
   }
 
-  checkCreatePowerUpTimer(time){
-    if(createPowerUpTimer > time){
-      createPowerUpTimer = 0;
-      PowerUpTimerRandomizer = Phaser.Math.Between(10,20);
-      this.createPowerUp();
+  HealthUp(submarine, powerup1){
+    if (playerHealth < playerMaxHealth - 150){
+      playerHealth += 200;
+      playerMaxHealth +=50;
+      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+      powerup1.destroy();
     }
-    else{
-      createPowerUpTimer += 1/60;
+    else {
+      var healthDifference = playerMaxHealth - playerHealth;
+      playerMaxHealth +=50;
+      playerHealth += (healthDifference + 50);
+      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
+      powerup1.destroy();
     }
+  }
+
+  DamageUp(submarine, powerup2){
+    playerDamage +=50;
+    this.damageLabel.text = "PlayerDamage: " + playerDamage;
+    powerup2.destroy();
+  }
+
+  SpeedUp(submarine, powerup3){
+    playerSpeed += 100;
+    this.speedLabel.text = "PlayerSpeed: " + playerSpeed;
+    powerup3.destroy();
   }
   
-  shootSubmarineProjectile(){
-    var SubmarineProjectile = new SubmarineProjectiles(this);
-  }
   createEnemies(){
     //var enemyNumber = 0.75;
     var Enemy = new Enemies(this, 0.75, levelMultiplier);
   }
 
-  createPowerUp(){
-    var PowerUpNumber = Phaser.Math.Between(1, 100);
-    var PlayerPowerUp = new PowerUp(this, PowerUpNumber);
-    //var PlayerPowerUp = new PowerUp(this, 25);
-  }
 
   //projectile & enemy collision
   hurtEnemy(projectiles, enemies) {
@@ -319,97 +316,4 @@ class Level1 extends Phaser.Scene{
       this.scene.start('deadScene', {transferScore: score});
     }
   }
-
-  //collisions with power ups
-  HealthUp(submarine, powerup1){
-    if (playerHealth < playerMaxHealth - 150){
-      playerHealth += 200;
-      playerMaxHealth +=50;
-      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
-      powerup1.destroy();
-    }
-    else {
-      var healthDifference = playerMaxHealth - playerHealth;
-      playerMaxHealth +=50;
-      playerHealth += (healthDifference + 50);
-      this.playerHealthLabel.text =  "PlayerHealth: " + playerHealth + "/" + playerMaxHealth;
-      powerup1.destroy();
-    }
-  }
-
-  DamageUp(submarine, powerup2){
-    playerDamage +=50;
-    this.damageLabel.text = "PlayerDamage: " + playerDamage;
-    powerup2.destroy();
-  }
-
-  SpeedUp(submarine, powerup3){
-    playerSpeed += 100;
-    this.speedLabel.text = "PlayerSpeed: " + playerSpeed;
-    powerup3.destroy();
-  }
-  //check win and set boss health
-  checkWinLevel1(){
-    if (score >= 200){
-      bossHealth = 1200;
-      bossMaxHealth = 1200;
-      this.scene.start('Level1Boss');
-    }
-  }
-
-  movePlayerManager(){
-    //move left
-    if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move up
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.y = -playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move down
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move up left
-    else if(this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move up right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move down left
-    else if (this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = -playerSpeed;
-    }
-    //move down right
-    else if (!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = playerSpeed;
-    }
-    //stop moving
-    else{
-      this.submarine.body.velocity.x = 0;
-      this.submarine.body.velocity.y=0;
-    }
-
-  }
-
-
-
-}
-
-function setCurrentWeather(weatherPassed) {
-  currentWeather = weatherPassed;
 }

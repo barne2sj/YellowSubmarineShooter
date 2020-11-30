@@ -4,36 +4,11 @@ class Level3Boss extends Phaser.Scene{
 
   }
   preload(){
-    //load background land and sky
-    this.load.image('flowersNight', 'assets/images/flowersNight.png');
-    this.load.image('flowersDay', 'assets/images/flowersDay.png');
-    this.load.image('sunclear', 'assets/images/day-layer.png');
-    this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
-    this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
-
-    //load submarine spritesheet
-    this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
-      frameWidth: 328,
-      frameHeight: 144
-    });
-
+    loadReusedSprites(this, 'Level3Boss', true);
     //load turtle boss spritesheet
     this.load.spritesheet("turtleBoss", "assets/images/turtleboss.png", {
       frameWidth: 960,
       frameHeight: 603
-    });
-
-    // load submarine projectile spritesheet
-    this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
-      frameWidth:50,
-      frameHeight:46
-    });
-
-    //load playerExplosion spritesheet
-    this.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
-      frameWidth: 350,
-      frameHeight: 296.5
     });
 
     //load bossExplosion spritesheet
@@ -48,9 +23,6 @@ class Level3Boss extends Phaser.Scene{
       frameHeight:138
     });
 
-    //load pixelfont
-    this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
-
   }
 
 
@@ -60,23 +32,8 @@ class Level3Boss extends Phaser.Scene{
     this.bossAttackTimer = 0;
 
 
-    //create submarine animation
-    this.anims.create({
-      key: "submarine",
-      frames: this.anims.generateFrameNumbers("yellowsubmarine"),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    //create submarine projectile animation
-    this.anims.create({
-      key:"SubmarineProjectile_anim",
-      frames: this.anims.generateFrameNumbers("SubmarineProjectile"),
-      frameRate:20,
-      repeat:-1
-    });
-
-    //create hand boss animation
+ 
+    //create turtle boss animation
     this.anims.create({
       key: "turtleBoss_anim",
       frames: this.anims.generateFrameNumbers("turtleBoss"),
@@ -84,15 +41,8 @@ class Level3Boss extends Phaser.Scene{
       repeat: -1
     });
 
-    //create player explosion animation
-    this.anims.create({
-      key:"playerExplosion_anim",
-      frames: this.anims.generateFrameNumbers("playerExplosion"),
-      frameRate:20,
-      repeat:-1
-    });
 
-    //create fish boss explosion animation
+    //create turtle boss explosion animation
     this.anims.create({
       key: "bossExplosion_anim",
       frames: this.anims.generateFrameNumbers("bossExplosion"),
@@ -100,7 +50,7 @@ class Level3Boss extends Phaser.Scene{
       repeat: -1
     });
 
-    //create fish boss projectile animation
+    //create turtle boss projectile animation
     this.anims.create({
       key:"turtleBossProjectile_anim",
       frames: this.anims.generateFrameNumbers("turtleBossProjectile"),
@@ -108,54 +58,17 @@ class Level3Boss extends Phaser.Scene{
       repeat:-1
     });    
 
-    //create background sky and ground
-    if(currentWeather != 'Clear' && currentWeather != ''){
-      currentWeather = 'Cloudy';
-    } else {
-      currentWeather = 'Clear';
-    }
-    var currentDate = new Date();
-    var currentHour = currentDate.getHours();
-    if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "flowersDay");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
-      }
-    } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "flowersNight");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
-      }
-    }
-
-    //create the submarine
-    this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
-
-    //play submarine animation
-    this.submarine.play("submarine");
-
     //create turtle boss
     this.turtleBoss = this.physics.add.sprite(config.width -250, config.height - 220, "turtleBoss");
 
     //play turtle boss animation
     this.turtleBoss.play("turtleBoss_anim");
 
-    //set world bounds on submarine
-    this.submarine.setCollideWorldBounds(true);
-
-    //set world bounds
-    this.physics.world.setBoundsCollision();
-
-    //add keys
-    this.shoot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    
+    createSprites(this);
+    
+    loadWeather(this, 'flowersDay', 'flowersNight', 'Level3', true);
+     
 
     //Score graphics
     var graphics = this.add.graphics();
@@ -205,21 +118,18 @@ class Level3Boss extends Phaser.Scene{
     //enemy projectile and player overlap
     this.physics.add.overlap(this.submarine, this.bossProjectiles, this.playerHit, null, this);
 
-    //set depth of submarine
-    this.submarine.setDepth(5);
   }
 
   update(){
-    //moves background sky and ground
-    this.skyTile.tilePositionX +=1.0;
+
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
-        this.shootSubmarineProjectile();
+        shootSubmarineProjectile(this);
     }
 
     //Checks for player movement
-    this.movePlayerManager();
+    movePlayerManager(this, this.submarine);
 
     //iterate through each element of projectile group
     for(var i = 0; i < this.projectiles.getChildren().length; i++){
@@ -314,52 +224,4 @@ class Level3Boss extends Phaser.Scene{
     }
   }
 
-  movePlayerManager(){
-    //move left
-    if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move up
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.y = -playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move down
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move up left
-    else if(this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move up right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move down left
-    else if (this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = -playerSpeed;
-    }
-    //move down right
-    else if (!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = playerSpeed;
-    }
-    //stop moving
-    else{
-      this.submarine.body.velocity.x = 0;
-      this.submarine.body.velocity.y=0;
-    }
-
-  }
 }

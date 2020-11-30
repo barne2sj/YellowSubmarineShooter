@@ -7,33 +7,11 @@ class Level4Boss extends Phaser.Scene{
     //load background land and sky
     this.load.image('linesNight', 'assets/images/Lines-night-bkg.png');
     this.load.image('linesDay', 'assets/images/LinesBackground.png');
-    this.load.image('sunclear', 'assets/images/day-layer.png');
-    this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
-    this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
-
-    //load submarine spritesheet
-    this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
-      frameWidth: 328,
-      frameHeight: 144
-    });
-
+    
     //load piano boss spritesheet
     this.load.spritesheet("PianoBoss", "assets/images/PianoBoss.png", {
       frameWidth: 460,
       frameHeight: 468
-    });
-
-    // load submarine projectile spritesheet
-    this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
-      frameWidth:50,
-      frameHeight:46
-    });
-
-    //load playerExplosion spritesheet
-    this.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
-      frameWidth: 350,
-      frameHeight: 296.5
     });
 
     //load bossExplosion spritesheet
@@ -54,9 +32,6 @@ class Level4Boss extends Phaser.Scene{
       frameHeight: 354
     });
 
-    //load pixelfont
-    this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
-
   }
 
 
@@ -66,36 +41,12 @@ class Level4Boss extends Phaser.Scene{
     this.bossAttackTimer = 0;
 
 
-    //create submarine animation
-    this.anims.create({
-      key: "submarine",
-      frames: this.anims.generateFrameNumbers("yellowsubmarine"),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    //create submarine projectile animation
-    this.anims.create({
-      key:"SubmarineProjectile_anim",
-      frames: this.anims.generateFrameNumbers("SubmarineProjectile"),
-      frameRate:20,
-      repeat:-1
-    });
-
     //create piano boss animation
     this.anims.create({
       key: "PianoBoss_anim",
       frames: this.anims.generateFrameNumbers("PianoBoss"),
       frameRate: 2,
       repeat: -1
-    });
-
-    //create player explosion animation
-    this.anims.create({
-      key:"playerExplosion_anim",
-      frames: this.anims.generateFrameNumbers("playerExplosion"),
-      frameRate:20,
-      repeat:-1
     });
 
     //create piano boss explosion animation
@@ -123,55 +74,15 @@ class Level4Boss extends Phaser.Scene{
       hideOnComplete: true
     });
 
-    //create background sky and ground
-    if(currentWeather != 'Clear' && currentWeather != ''){
-      currentWeather = 'Cloudy';
-    } else {
-      currentWeather = 'Clear';
-    }
-    var currentDate = new Date();
-    var currentHour = currentDate.getHours();
-    if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "linesDay");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
-      }
-    } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "linesNight");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
-      }
-    }
-
-    //create the submarine
-    this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
-
-    //play submarine animation
-    this.submarine.play("submarine");
-
+    createSprites(this);
+    
+    loadWeather(this, 'linesDay', 'linesNight', null, false);
+     
     //create piano boss
-    this.PianoBoss = this.physics.add.sprite(config.width -250, config.height - 220, "turtleBoss");
+    this.PianoBoss = this.physics.add.sprite(config.width -250, config.height - 220, "PianoBoss");
 
     //play piano boss animation
     this.PianoBoss.play("PianoBoss_anim");
-
-    //set world bounds on submarine
-    this.submarine.setCollideWorldBounds(true);
-
-    //set world bounds
-    this.physics.world.setBoundsCollision();
-
-    //add keys
-    this.shoot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-
     //Score graphics
     var graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1);
@@ -223,21 +134,17 @@ class Level4Boss extends Phaser.Scene{
     //note explosions and player overlap
     this.physics.add.overlap(this.submarine, this.noteExplosions, this.playerHit, null, this);
 
-    //set depth of submarine
-    this.submarine.setDepth(5);
   }
 
   update(){
-    //moves background sky and ground
-    this.skyTile.tilePositionX +=1.0;
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
-        this.shootSubmarineProjectile();
+        shootSubmarineProjectile(this);
     }
 
     //Checks for player movement
-    this.movePlayerManager();
+    movePlayerManager(this, this.submarine);
 
     //iterate through each element of projectile group
     for(var i = 0; i < this.projectiles.getChildren().length; i++){
@@ -306,10 +213,6 @@ class Level4Boss extends Phaser.Scene{
     else{handBossJumpCount++}
   }
 
-  //shoot submarine projectile
-  shootSubmarineProjectile(){
-    var SubmarineProjectile = new SubmarineProjectiles(this);
-  }
 
   //projectile & enemy collision
   hurtBoss(projectiles, PianoBoss) {
@@ -344,52 +247,4 @@ class Level4Boss extends Phaser.Scene{
     }
   }
 
-  movePlayerManager(){
-    //move left
-    if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move up
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.y = -playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move down
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move up left
-    else if(this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move up right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move down left
-    else if (this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = -playerSpeed;
-    }
-    //move down right
-    else if (!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = playerSpeed;
-    }
-    //stop moving
-    else{
-      this.submarine.body.velocity.x = 0;
-      this.submarine.body.velocity.y=0;
-    }
-
-  }
 }

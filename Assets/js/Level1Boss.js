@@ -6,22 +6,10 @@ class Level1Boss extends Phaser.Scene{
 
   preload(){
     //load background land and sky
-    this.load.image('skynight', 'assets/images/LoveUpper-night.png');
-    this.load.image('skyday', 'assets/images/LoveUpper.png');
-    this.load.image('sunclear', 'assets/images/day-layer.png');
-    this.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
-    this.load.image('moonclear', 'assets/images/night-layer.png');
-    this.load.image('suncloudy', 'assets/images/night-layer-cloudy.png');
-    this.load.image('lovelower', 'assets/images/LoveLower.png');
+   
     this.load.image('cloud1', 'assets/images/cloud1.png');
     this.load.image('cloud2', 'assets/images/cloud2.png');
     this.load.image('cloud3', 'assets/images/cloud3.png');
-
-    //load submarine spritesheet
-    this.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
-      frameWidth: 328,
-      frameHeight: 144
-    });
 
     //load boss spritesheet
     this.load.spritesheet("handBoss", "assets/images/HandBossSprite.png", {
@@ -29,17 +17,6 @@ class Level1Boss extends Phaser.Scene{
       frameHeight: 295
     });
 
-    // load submarine projectile spritesheet
-    this.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
-      frameWidth:50,
-      frameHeight:46
-    });
-
-    //load playerExplosion spritesheet
-    this.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
-      frameWidth: 350,
-      frameHeight: 296.5
-    });
 
     //load bossExplosion spritesheet
     this.load.spritesheet("bossExplosion", "assets/images/BossExplosion.png", {
@@ -53,45 +30,19 @@ class Level1Boss extends Phaser.Scene{
       frameHeight:60
     });
 
-    //load pixelfont
-    this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
+    loadReusedSprites(this, 'Level1Boss', true);
 
-  }
+ }
 
   create(){
     this.bossAttackTimer = 0;
-
-
-    //create submarine animation
-    this.anims.create({
-      key: "submarine",
-      frames: this.anims.generateFrameNumbers("yellowsubmarine"),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    //create submarine projectile animation
-    this.anims.create({
-      key:"SubmarineProjectile_anim",
-      frames: this.anims.generateFrameNumbers("SubmarineProjectile"),
-      frameRate:20,
-      repeat:-1
-    });
-
+    
     //create hand boss animation
     this.anims.create({
       key: "handBoss_anim",
       frames: this.anims.generateFrameNumbers("handBoss"),
-      frameRate: 10,
+      frameRate: 1,
       repeat: -1
-    });
-
-    //create player explosion animation
-    this.anims.create({
-      key:"playerExplosion_anim",
-      frames: this.anims.generateFrameNumbers("playerExplosion"),
-      frameRate:20,
-      repeat:-1
     });
 
     //create hand boss explosion animation
@@ -110,33 +61,13 @@ class Level1Boss extends Phaser.Scene{
       repeat:-1
     });    
 
-    //create background sky and ground
-    if(currentWeather != 'Clear' && currentWeather != ''){
-      currentWeather = 'Cloudy';
-    } else {
-      currentWeather = 'Clear';
-    }
-    var currentDate = new Date();
-    var currentHour = currentDate.getHours();
-    if(currentHour >= 6 && currentHour <= 20) {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skyday");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'sunclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'suncloudy');
-      }
-    } else {
-      this.skyTile = this.add.tileSprite(960,540,config.width, config.height, "skynight");
-      if(currentWeather == 'Clear'){
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'moonclear');
-      } else{
-        this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'mooncloudy');
-      }
-    }
+    createSprites(this);
     
+    loadWeather(this, 'skyday', 'skynight', 'Level1Boss', true);
+     
     //create cloud images
-    this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 + 200, "cloud1");
-    this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2, "cloud2");
+    this.cloudImage1 = this.add.sprite(config.width + 250, config.height/2 - 100, "cloud1");
+    this.cloudImage2 = this.add.sprite(config.width + 250, config.height/2 - 50, "cloud2");
     this.cloudImage3 = this.add.sprite(config.width + 250, config.height/2 - 200, "cloud3");
     //create cloud group
     this.clouds = this.physics.add.group();
@@ -144,31 +75,13 @@ class Level1Boss extends Phaser.Scene{
     this.clouds.add(this.cloudImage1);
     this.clouds.add(this.cloudImage2);
     this.clouds.add(this.cloudImage2);
-    this.ground = this.add.tileSprite(960,540,config.width, config.height, 'lovelower');
-    //create the submarine
-    this.submarine = this.physics.add.sprite(config.width / 2 - 600, config.height/ 3, "yellowsubmarine");
 
-    //play submarine animation
-    this.submarine.play("submarine");
 
     //create boss
     this.handBoss = this.physics.add.sprite(config.width -250, config.height - 150, "handBoss");
 
     //play hand boss animation
     this.handBoss.play("handBoss_anim");
-
-    //set world bounds on submarine
-    this.submarine.setCollideWorldBounds(true);
-
-    //set world bounds
-    this.physics.world.setBoundsCollision();
-
-    //add keys
-    this.shoot = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
     //Score graphics
     var graphics = this.add.graphics();
@@ -181,12 +94,17 @@ class Level1Boss extends Phaser.Scene{
     graphics.lineTo(0, 0);
     graphics.closePath();
     graphics.fillPath();
+    graphics.setDepth(100);
 
     // add top label
     this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE: " + score, 50);
     this.playerHealthLabel = this.add.bitmapText(600, 5, "pixelFont", "PlayerHealth: " + playerHealth + "/" + playerMaxHealth, 50)
     this.speedLabel = this.add.bitmapText(1100, 5, "pixelFont", "PlayerSpeed: " + playerSpeed, 50);
     this.damageLabel = this.add.bitmapText(1500, 5, "pixelFont", "PlayerDamage: " + playerDamage, 50);
+    this.scoreLabel.setDepth(101);
+    this.playerHealthLabel.setDepth(101);
+    this.speedLabel.setDepth(101);
+    this.damageLabel.setDepth(101);
 
     //boss health graphics
     this.bossHPGraphics = this.add.graphics();
@@ -218,8 +136,6 @@ class Level1Boss extends Phaser.Scene{
     //enemy projectile and player overlap
     this.physics.add.overlap(this.submarine, this.bossProjectiles, this.playerHit, null, this);
 
-    //set depth of submarine
-    this.submarine.setDepth(5);
   }
 
   update(){
@@ -228,11 +144,11 @@ class Level1Boss extends Phaser.Scene{
 
     //shoot projectile
     if(Phaser.Input.Keyboard.JustDown(this.shoot)){
-        this.shootSubmarineProjectile();
+        shootSubmarineProjectile(this);
     }
 
     //Checks for player movement
-    this.movePlayerManager();
+    movePlayerManager(this, this.submarine);
 
     //iterate through each element of projectile group
     for(var i = 0; i < this.projectiles.getChildren().length; i++){
@@ -308,7 +224,7 @@ class Level1Boss extends Phaser.Scene{
   // reset cloud
   resetCloud(cloudToMove){
     cloudToMove.x = config.width + 250;
-    var randomY = Phaser.Math.Between(200, config.height);
+    var randomY = Phaser.Math.Between(0, config.height * .5);
     cloudToMove.y = randomY;
     var randomForLayer = Phaser.Math.Between(0, config.height)
     if(randomForLayer < config.height / 2)
@@ -317,10 +233,6 @@ class Level1Boss extends Phaser.Scene{
     }else{
       cloudToMove.setDepth(0);
     }
-  }
-  //shoot submarine projectile
-  shootSubmarineProjectile(){
-    var SubmarineProjectile = new SubmarineProjectiles(this);
   }
 
   //projectile & enemy collision
@@ -355,58 +267,6 @@ class Level1Boss extends Phaser.Scene{
       this.scene.start('deadScene', {transferScore: score});
     }
   }
-
-  movePlayerManager(){
-    //move left
-    if(this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y=0;
-    }
-    //move up
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.y = -playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move down
-    else if (!this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = 0;
-    }
-    //move up left
-    else if(this.leftKey.isDown && !this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = -playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move up right
-    else if(!this.leftKey.isDown && this.rightKey.isDown && this.upKey.isDown && !this.downKey.isDown){
-      this.submarine.body.velocity.x = playerSpeed;
-      this.submarine.body.velocity.y = -playerSpeed;
-    }
-    //move down left
-    else if (this.leftKey.isDown && !this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = -playerSpeed;
-    }
-    //move down right
-    else if (!this.leftKey.isDown && this.rightKey.isDown && !this.upKey.isDown && this.downKey.isDown){
-      this.submarine.body.velocity.y = playerSpeed;
-      this.submarine.body.velocity.x = playerSpeed;
-    }
-    //stop moving
-    else{
-      this.submarine.body.velocity.x = 0;
-      this.submarine.body.velocity.y=0;
-    }
-
-  }
-
-
-
 
 
 }
