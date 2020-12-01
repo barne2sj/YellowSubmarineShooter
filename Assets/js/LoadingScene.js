@@ -25,6 +25,19 @@ class LoadingScene extends Phaser.Scene{
     }
 
     create(){
-        
+        //Creating animations
+        createSprites(this);
+        this.anims.create({
+            key: 'loadIcon_anim',
+            frames: this.anims.generateFrameNumbers('loadIcon'),
+            frameRate: 1,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'loadWord_anim',
+            frames: this.anims.generateFrameNumbers('loadIcon'),
+            frameRate: 1,
+            repeat: -1
+        });
     }
 }
