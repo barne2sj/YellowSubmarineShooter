@@ -39,5 +39,8 @@ class LoadingScene extends Phaser.Scene{
             frameRate: 1,
             repeat: -1
         });
+
+        //Start game
+        this.state.start('Level1');
     }
 }
