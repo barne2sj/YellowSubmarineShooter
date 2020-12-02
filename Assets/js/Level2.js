@@ -185,7 +185,7 @@ class Level2 extends Phaser.Scene{
     }
     
     //check for level 1 complete
-    checkWinLevel(this, 2000, 5000, 5000, 'Level2Boss');
+    checkWinLevel(this, 5000, 5000, 5000, 'Level2Boss');
   
   }
 

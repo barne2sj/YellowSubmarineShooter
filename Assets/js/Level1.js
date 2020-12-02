@@ -4,15 +4,16 @@ var enemyTimerRandomizer = Phaser.Math.Between(4, 6);
 var createPowerUpTimer = 0;
 var PowerUpTimerRandomizer = Phaser.Math.Between (10, 20);
 var score = 0;
-var playerDamage = 50000;
+var playerDamage = 200;
 var playerSpeed = 300;
-var playerHealth = 100000;
+var playerHealth = 200;
 var playerMaxHealth = 100000;
 var bossHealth = 0;
 var bossMaxHealth = 0;
 var handBossJumpTimer = Phaser.Math.Between(20, 100);
 var handBossJumpCount = 0;
 var levelMultiplier = 0;
+      
 
 class Level1 extends Phaser.Scene{
   constructor(){
@@ -189,7 +190,7 @@ class Level1 extends Phaser.Scene{
     }
     
     //check for level 1 complete
-    checkWinLevel(this, 200, 1200, 1200, 'Level1Boss');
+    checkWinLevel(this, 200, 3000, 3000, 'Level1Boss');
 
     //move clouds across screen
     this.moveCloud(this.cloudImage1);

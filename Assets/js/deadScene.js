@@ -1,66 +1,144 @@
+
+
 class deadScene extends Phaser.Scene{
   constructor(){
     super("deadScene");
-    var playerScore; 
   }
 
-  startGame(){
-    document.getElementById('Level1').style.display = 'none';
-  }
-  replay(){
-    document.getElementById('deadScene').style.display = 'none';
-    buttonGo.style.display = 'none';
-    replayButton = 'replay';
-    Image.Computer.src = 'images/replay-button.png';
-    document.getElementById.style.backgroundColor = 'yellow';
 
-    deselctAll();
-    location.reload();
-  }
-  go(){
-    var textEndTitle = document.getElementById('textEndTitle');
-    var textEndMessage = document.getElementById('textEndMessage');
-    if (points == 0) {
-    if(playerScore = 1000) {
-      level = 'Level1Boss';
-    }
-    else if(playerScore = 2000) {
-      level = 'Level2Boss';
-    }
-    else (playerScore = 3000) => {
-      level = 'Level3Boss';
-    }
-  }
-
-  document.getElementById('endScreen').style.display ='block';
-
-  //graphics
-  var graphics = this.add.graphics();
-  graphics.fillStyle(0x000000, 1);
-  graphics.beginPath();
-  graphics.moveTo(0,0);
-  graphics.lineTo(config.width, 0);
-  graphics.lineTo(config.width, 80);
-  graphics.lineTo(0, 80);
-  graphics.lineTo(0, 0);
-  graphics.closePath();
-  graphics.fillPath();
+  preload(){
 
 
-}
-  //preload(){
-    
-  //}
+    this.load.image('theEndBkg', 'assets/images/TheEndBackground.png');
+    this.load.spritesheet('theReplayButton', 'assets/images/replay-button.png', {
+      frameWidth: 200,
+      frameHeight: 200
+    })
+
+    this.load.spritesheet("theEndWord", "assets/images/TheEndWord.png", {
+      frameWidth: 632,
+      frameHeight: 137
+    });    
   
-  //create(){
-    //this.scoreLabel = this.add.bitmapText(250, config.height /2 - 100, "pixelFont", "SCORE: " + score, 200);
-    
-  //}
+  }
   
-  //update(){
-    //this.dissappearTimer ++;
-    //if(this.dissappearTimer >= 1000){this.destroy();}
+   async create(){
 
+    
+    this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'theEndBkg');
 
-  //}
+    this.anims.create({
+      key: "theEnd_anim",
+      frames: this.anims.generateFrameNumbers("theEndWord"),
+      frameRate: 4,
+      repeat: -1
+    });
+
+    this.endWord = this.add.sprite(config.width/2, 150, 'theEndWord');
+    this.endWord.play('theEnd_anim');
+
+    this.replaybutton = this.add.sprite(config.width - 200, 150, 'theReplayButton').setInteractive();
+
+    this.replaybutton.on('pointerdown', function (pointer) {
+      playerDamage = 200;
+      playerHealth = 200;
+      playerSpeed = 300;
+      handBossJumpTimer = Phaser.Math.Between(20, 100);
+      handBossJumpCount = 0;
+      levelMultiplier = 0;
+      createEnemyTimer = 0;
+      enemyTimerRandomizer = Phaser.Math.Between(4, 6);
+      createPowerUpTimer = 0;
+      PowerUpTimerRandomizer = Phaser.Math.Between (10, 20);
+      score = 0
+      this.scene.scene.scene.start('Level1');
+  }, this);
+
+    var graphics = this.add.graphics();
+    graphics.fillStyle(0x000000, 1);
+    graphics.beginPath();
+    graphics.moveTo(0,0);
+    graphics.lineTo(400, 0);
+    graphics.lineTo(400, config.height);
+    graphics.lineTo(0, config.height);
+    graphics.lineTo(0, 0);
+    graphics.closePath();
+    graphics.fillPath();
+
+    var title1 = this.add.bitmapText(10, 5, "pixelFont", "YOUR FINAL SCORE", 60);
+    var title3 = this.add.bitmapText(10, 100, "pixelFont", "--------------------", 50);
+    var title4 = this.add.bitmapText(30, 175, "pixelFont", score, 50);
+
+  }
+
+  
+
+  
+  update(){
+  }
 }
+
+
+function fetchScores() {
+  return fetch(serverURL)
+    .then(response => response.json())
+}
+
+async function updateMessages() {
+  // Fetch Messages
+  const fetchedScores = await fetchScores();
+  // Loop over the messages. Inside the loop we will:
+  // get each message
+  // format it
+  // add it to the chatbox
+  let formattedScores = "";
+  fetchedScores.forEach(savedScore => {
+    formattedScores += fetchedScores.player + '                    ' + fetchedScores.score + '\r\n';
+  });
+  var resultsArea = this.add.bitmapText(10, 225, "pixelFont", resultList, 50);
+}
+
+// async function loadlist(){
+//   var recordList = '';
+
+
+
+
+
+  
+//   $.ajax({
+//     type: "GET",
+//     url: "assets/scores/scores.xml",
+//     dataType: "xml",
+
+//     error: function (e) {
+//         alert("An error occurred while processing XML file");
+//         console.log("XML reading Failed: ", e);
+//     },
+
+//   success: function (response) {
+//     var items = [];
+//     var sorteditems;
+//     $(response).find("scorerecord").each(async function(){
+//         var score = parseInt($(this).find('score').text());
+//         var player = $(this).find('player').text();
+//         var item={player:player, score:score};
+//         items.push(item);
+
+        
+//       });
+
+//       sorteditems = items.sort((a, b) => parseInt(b.score) - parseInt(a.score));
+//       var records = '';
+//       for(var item of sorteditems){
+//         records += item.player + '                    ' + item.score + '\r\n';
+//       }
+//       document.getElementById("lblResults").innerHTML = records;
+    
+//   }
+  
+// }
+
+//);
+
+//}
