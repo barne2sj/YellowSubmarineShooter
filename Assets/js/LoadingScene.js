@@ -5,17 +5,17 @@ class LoadingScene extends Phaser.Scene{
 
     preload(){
         //Background
-        this.load.image('tophats', 'assets/images/LoadingBase.png');
-        this.load.spritesheet('thePlayButton', 'assets/images/play.png', {
+        this.load.image('tophats', 'Assets/images/LoadingBase.png');
+        this.load.spritesheet('thePlayButton', 'Assets/images/play.png', {
             frameWidth: 600,
             frameHeight: 145
         });
         //Loading icon and word spritesheets
-        this.load.spritesheet('loadIcon', 'assets/images/LoadingSprite.png', {
+        this.load.spritesheet('loadIcon', 'Assets/images/LoadingSprite.png', {
             frameWidth: 1920,
             frameHeight: 1080,
         });
-        this.load.spritesheet('loadWord', 'assets/images/LoadingWordSprite.png', {
+        this.load.spritesheet('loadWord', 'Assets/images/LoadingWordSprite.png', {
             frameWidth: 673,
             frameHeight: 90
         });

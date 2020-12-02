@@ -6,19 +6,19 @@ class Level3Boss extends Phaser.Scene{
   preload(){
     loadReusedSprites(this, 'Level3Boss', true);
     //load turtle boss spritesheet
-    this.load.spritesheet("turtleBoss", "assets/images/turtleboss.png", {
+    this.load.spritesheet("turtleBoss", "Assets/images/turtleboss.png", {
       frameWidth: 960,
       frameHeight: 602
     });
 
     //load bossExplosion spritesheet
-    this.load.spritesheet("bossExplosion", "assets/images/BossExplosion.png", {
+    this.load.spritesheet("bossExplosion", "Assets/images/BossExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });
 
     // load turtle boss Projectile spritesheet
-    this.load.spritesheet("turtleBossProjectile", "assets/images/TurtleProjectile.png", {
+    this.load.spritesheet("turtleBossProjectile", "Assets/images/TurtleProjectile.png", {
       frameWidth:253,
       frameHeight:138
     });

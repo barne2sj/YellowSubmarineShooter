@@ -23,31 +23,31 @@ class Level1 extends Phaser.Scene{
   preload(){
     
     //load background land and sky
-    this.load.image('skynight', 'assets/images/LoveUpper-night.png');
-    this.load.image('skyday', 'assets/images/LoveUpper.png');
+    this.load.image('skynight', 'Assets/images/LoveUpper-night.png');
+    this.load.image('skyday', 'Assets/images/LoveUpper.png');
 
-    this.load.image('cloud1', 'assets/images/cloud1.png');
-    this.load.image('cloud2', 'assets/images/cloud2.png');
-    this.load.image('cloud3', 'assets/images/cloud3.png');
+    this.load.image('cloud1', 'Assets/images/cloud1.png');
+    this.load.image('cloud2', 'Assets/images/cloud2.png');
+    this.load.image('cloud3', 'Assets/images/cloud3.png');
     
 
     //load submarine and repeatable stuff
     loadReusedSprites(this, null, null);
 
     //load enemy 1 spritesheet
-    this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
+    this.load.spritesheet("Enemy1", "Assets/images/bluemeaniesprite.png", {
       frameWidth: 224,
       frameHeight: 175,
     });
 
     // load enemy1Projectile spritesheet
-    this.load.spritesheet("enemy1Projectile", "assets/images/arrowsprite.png", {
+    this.load.spritesheet("enemy1Projectile", "Assets/images/arrowsprite.png", {
       frameWidth:135,
       frameHeight:26
     });
 
     //load pixelfont
-    this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
+    this.load.bitmapFont("pixelFont", "Assets/font/font.png", "Assets/font/font.xml");
     
   }
   create(){

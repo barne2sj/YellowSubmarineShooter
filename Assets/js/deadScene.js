@@ -9,13 +9,13 @@ class deadScene extends Phaser.Scene{
   preload(){
 
 
-    this.load.image('theEndBkg', 'assets/images/TheEndBackground.png');
-    this.load.spritesheet('theReplayButton', 'assets/images/replay-button.png', {
+    this.load.image('theEndBkg', 'Assets/images/TheEndBackground.png');
+    this.load.spritesheet('theReplayButton', 'Assets/images/replay-button.png', {
       frameWidth: 200,
       frameHeight: 200
     })
 
-    this.load.spritesheet("theEndWord", "assets/images/TheEndWord.png", {
+    this.load.spritesheet("theEndWord", "Assets/images/TheEndWord.png", {
       frameWidth: 632,
       frameHeight: 137
     });    
@@ -108,7 +108,7 @@ async function updateMessages() {
   
 //   $.ajax({
 //     type: "GET",
-//     url: "assets/scores/scores.xml",
+//     url: "Assets/scores/scores.xml",
 //     dataType: "xml",
 
 //     error: function (e) {

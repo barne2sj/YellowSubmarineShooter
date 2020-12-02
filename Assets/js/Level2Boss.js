@@ -9,19 +9,19 @@ class Level2Boss extends Phaser.Scene{
     loadReusedSprites(this, null, null);
 
     //load fish boss spritesheet
-    this.load.spritesheet("fishBoss", "assets/images/fishboss.png", {
+    this.load.spritesheet("fishBoss", "Assets/images/fishboss.png", {
       frameWidth: 1394,
       frameHeight: 655
     });
 
     //load bossExplosion spritesheet
-    this.load.spritesheet("bossExplosion", "assets/images/BossExplosion.png", {
+    this.load.spritesheet("bossExplosion", "Assets/images/BossExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });
 
     // load fish boss Projectile spritesheet
-    this.load.spritesheet("fishBossProjectile", "assets/images/FishBossProjectile.png", {
+    this.load.spritesheet("fishBossProjectile", "Assets/images/FishBossProjectile.png", {
       frameWidth:200,
       frameHeight:60.5
     });

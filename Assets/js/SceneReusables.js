@@ -1,42 +1,42 @@
 function loadReusedSprites(scene, sceneName, includeForeground){
         //load submarine spritesheet
-        scene.load.spritesheet("yellowsubmarine", "assets/images/YellowSubmarine.png", {
+        scene.load.spritesheet("yellowsubmarine", "Assets/images/YellowSubmarine.png", {
             frameWidth: 328,
             frameHeight: 144
         });
           // load submarine projectile spritesheet
-        scene.load.spritesheet("SubmarineProjectile", "assets/images/SubmarineProjectile.png", {
+        scene.load.spritesheet("SubmarineProjectile", "Assets/images/SubmarineProjectile.png", {
             frameWidth:50,
             frameHeight:46
         });
         //load playerExplosion spritesheet
-        scene.load.spritesheet("playerExplosion", "assets/images/explosionsmall.png", {
+        scene.load.spritesheet("playerExplosion", "Assets/images/explosionsmall.png", {
             frameWidth: 350,
             frameHeight: 296.5
         });
         //load smallEnemyExplosion spritesheet
-        scene.load.spritesheet("smallEnemyExplosion", "assets/images/smallEnemyExplosion.png", {
+        scene.load.spritesheet("smallEnemyExplosion", "Assets/images/smallEnemyExplosion.png", {
             frameWidth: 418,
             frameHeight: 354
         });
         //load powerup images
-        scene.load.image('PowerUp1', 'assets/images/PowerUp1.png');
-        scene.load.image('PowerUp2', 'assets/images/PowerUp2.png');
-        scene.load.image('PowerUp3', 'assets/images/PowerUp3.png');
-        scene.load.image('sunclear', 'assets/images/day-layer.png');
-        scene.load.image('suncloudy', 'assets/images/day-layer-cloudy.png');
-        scene.load.image('moonclear', 'assets/images/night-layer.png');
-        scene.load.image('mooncloudy', 'assets/images/night-layer-cloudy.png');
+        scene.load.image('PowerUp1', 'Assets/images/PowerUp1.png');
+        scene.load.image('PowerUp2', 'Assets/images/PowerUp2.png');
+        scene.load.image('PowerUp3', 'Assets/images/PowerUp3.png');
+        scene.load.image('sunclear', 'Assets/images/day-layer.png');
+        scene.load.image('suncloudy', 'Assets/images/day-layer-cloudy.png');
+        scene.load.image('moonclear', 'Assets/images/night-layer.png');
+        scene.load.image('mooncloudy', 'Assets/images/night-layer-cloudy.png');
 
         //load pixelfont
-        scene.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
+        scene.load.bitmapFont("pixelFont", "Assets/font/font.png", "Assets/font/font.xml");
         if(includeForeground == true){
             if(sceneName == 'Level1Boss'){
-                scene.load.image('lovelower', 'assets/images/LoveLower.png');
+                scene.load.image('lovelower', 'Assets/images/LoveLower.png');
             } else if (sceneName == 'Level3' || sceneName == 'Level3Boss') {
-                scene.load.image('flowerFore', 'assets/images/flowersbackgroundFore.png');
+                scene.load.image('flowerFore', 'Assets/images/flowersbackgroundFore.png');
             }else if(sceneName == 'Level4') {
-                scene.load.image('foodFore', 'assets/images/Foodoverlay.png')
+                scene.load.image('foodFore', 'Assets/images/Foodoverlay.png')
             }
         }
 }

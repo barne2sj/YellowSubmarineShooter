@@ -6,46 +6,46 @@ class Level4 extends Phaser.Scene{
   preload(){
     
     //load background land and sky
-    this.load.image('foodNight', 'assets/images/food-night-bkg.png');
-    this.load.image('foodDay', 'assets/images/food1.png');   
+    this.load.image('foodNight', 'Assets/images/food-night-bkg.png');
+    this.load.image('foodDay', 'Assets/images/food1.png');   
     loadReusedSprites(this, 'Level4', true);
     //load enemy 1 spritesheet
-    this.load.spritesheet("Enemy1", "assets/images/bluemeaniesprite.png", {
+    this.load.spritesheet("Enemy1", "Assets/images/bluemeaniesprite.png", {
       frameWidth: 224,
       frameHeight: 175,
     });
 
     //load enemy 2 spritesheet
-    this.load.spritesheet("Enemy2", "assets/images/BlueSub.png", {
+    this.load.spritesheet("Enemy2", "Assets/images/BlueSub.png", {
       frameWidth: 328,
       frameHeight: 144,
     });
 
     //load enemy 3 spritesheet
-    this.load.spritesheet("Enemy3", "assets/images/PinkSub.png", {
+    this.load.spritesheet("Enemy3", "Assets/images/PinkSub.png", {
       frameWidth: 328,
       frameHeight: 144,
     });
 
     //load enemy 4 spritesheet
-    this.load.spritesheet("Enemy4", "assets/images/GreenSub.png", {
+    this.load.spritesheet("Enemy4", "Assets/images/GreenSub.png", {
       frameWidth: 328,
       frameHeight: 144,
     });
 
     //load enemy 5 spritesheet
-    this.load.spritesheet("Enemy5", "assets/images/Enemy5.png", {
+    this.load.spritesheet("Enemy5", "Assets/images/Enemy5.png", {
       frameWidth: 421.5,
       frameHeight: 250,
     });
 
     //load smallEnemyExplosion spritesheet
-    this.load.spritesheet("smallEnemyExplosion", "assets/images/smallEnemyExplosion.png", {
+    this.load.spritesheet("smallEnemyExplosion", "Assets/images/smallEnemyExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });
     // load enemySubProjectile spritesheet
-    this.load.spritesheet("enemySubProjectile", "assets/images/torpedo.png", {
+    this.load.spritesheet("enemySubProjectile", "Assets/images/torpedo.png", {
       frameWidth:111,
       frameHeight:25
     });

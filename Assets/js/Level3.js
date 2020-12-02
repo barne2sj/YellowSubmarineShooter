@@ -7,19 +7,19 @@ class Level3 extends Phaser.Scene{
     
     loadReusedSprites(this, 'Level3', true);
     //load background land and sky
-    this.load.image('flowersNight', 'assets/images/flowersNight.png');
-    this.load.image('flowersDay', 'assets/images/flowersDay.png');    
+    this.load.image('flowersNight', 'Assets/images/flowersNight.png');
+    this.load.image('flowersDay', 'Assets/images/flowersDay.png');    
 
 
     //load enemy 5 spritesheet
-    this.load.spritesheet("Enemy5", "assets/images/Enemy5.png", {
+    this.load.spritesheet("Enemy5", "Assets/images/Enemy5.png", {
       frameWidth: 421.5,
       frameHeight: 250,
     });
 
 
     //load smallEnemyExplosion spritesheet
-    this.load.spritesheet("smallEnemyExplosion", "assets/images/smallEnemyExplosion.png", {
+    this.load.spritesheet("smallEnemyExplosion", "Assets/images/smallEnemyExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });

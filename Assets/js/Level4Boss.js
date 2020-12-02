@@ -5,29 +5,29 @@ class Level4Boss extends Phaser.Scene{
   }
   preload(){
     //load background land and sky
-    this.load.image('linesNight', 'assets/images/Lines-night-bkg.png');
-    this.load.image('linesDay', 'assets/images/LinesBackground.png');
+    this.load.image('linesNight', 'Assets/images/Lines-night-bkg.png');
+    this.load.image('linesDay', 'Assets/images/LinesBackground.png');
     
     //load piano boss spritesheet
-    this.load.spritesheet("PianoBoss", "assets/images/PianoBoss.png", {
+    this.load.spritesheet("PianoBoss", "Assets/images/PianoBoss.png", {
       frameWidth: 319,
       frameHeight: 500
     });
 
     //load bossExplosion spritesheet
-    this.load.spritesheet("bossExplosion", "assets/images/BossExplosion.png", {
+    this.load.spritesheet("bossExplosion", "Assets/images/BossExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });
 
     // load piano boss Projectile spritesheet
-    this.load.spritesheet("PianoBossProjectile", "assets/images/NoteProjectile.png", {
+    this.load.spritesheet("PianoBossProjectile", "Assets/images/NoteProjectile.png", {
       frameWidth:80,
       frameHeight:87.5
     });
 
     //load noteExplosion spritesheet
-    this.load.spritesheet("noteExplosion", "assets/images/smallEnemyExplosion.png", {
+    this.load.spritesheet("noteExplosion", "Assets/images/smallEnemyExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });

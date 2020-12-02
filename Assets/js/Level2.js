@@ -6,30 +6,30 @@ class Level2 extends Phaser.Scene{
   preload(){
     loadReusedSprites(this, null, null);
     //load background land and sky
-    this.load.image('waterNight', 'assets/images/waterNight.png');
-    this.load.image('waterDay', 'assets/images/waterDay.png');
+    this.load.image('waterNight', 'Assets/images/waterNight.png');
+    this.load.image('waterDay', 'Assets/images/waterDay.png');
 
     loadReusedSprites(this);
     //load enemy 2 spritesheet
-    this.load.spritesheet("Enemy2", "assets/images/BlueSub.png", {
+    this.load.spritesheet("Enemy2", "Assets/images/BlueSub.png", {
       frameWidth: 328,
       frameHeight: 144,
     });
 
     //load enemy 3 spritesheet
-    this.load.spritesheet("Enemy3", "assets/images/PinkSub.png", {
+    this.load.spritesheet("Enemy3", "Assets/images/PinkSub.png", {
       frameWidth: 328,
       frameHeight: 144,
     });
 
     //load enemy 4 spritesheet
-    this.load.spritesheet("Enemy4", "assets/images/GreenSub.png", {
+    this.load.spritesheet("Enemy4", "Assets/images/GreenSub.png", {
       frameWidth: 328,
       frameHeight: 144,
     });
 
     // load enemySubProjectile spritesheet
-    this.load.spritesheet("enemySubProjectile", "assets/images/torpedo.png", {
+    this.load.spritesheet("enemySubProjectile", "Assets/images/torpedo.png", {
       frameWidth:111,
       frameHeight:25
     });

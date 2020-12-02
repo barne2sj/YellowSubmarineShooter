@@ -7,25 +7,25 @@ class Level1Boss extends Phaser.Scene{
   preload(){
     //load background land and sky
    
-    this.load.image('cloud1', 'assets/images/cloud1.png');
-    this.load.image('cloud2', 'assets/images/cloud2.png');
-    this.load.image('cloud3', 'assets/images/cloud3.png');
+    this.load.image('cloud1', 'Assets/images/cloud1.png');
+    this.load.image('cloud2', 'Assets/images/cloud2.png');
+    this.load.image('cloud3', 'Assets/images/cloud3.png');
 
     //load boss spritesheet
-    this.load.spritesheet("handBoss", "assets/images/HandBossSprite.png", {
+    this.load.spritesheet("handBoss", "Assets/images/HandBossSprite.png", {
       frameWidth: 510,
       frameHeight: 295
     });
 
 
     //load bossExplosion spritesheet
-    this.load.spritesheet("bossExplosion", "assets/images/BossExplosion.png", {
+    this.load.spritesheet("bossExplosion", "Assets/images/BossExplosion.png", {
       frameWidth: 418,
       frameHeight: 354
     });
 
     // load hand boss Projectile spritesheet
-    this.load.spritesheet("handBossProjectile", "assets/images/HandSprite.png", {
+    this.load.spritesheet("handBossProjectile", "Assets/images/HandSprite.png", {
       frameWidth:292,
       frameHeight:60
     });
