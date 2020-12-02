@@ -39,7 +39,6 @@ class LoadingScene extends Phaser.Scene{
             frameRate: 1,
             repeat: -1
         });
-
         this.celestialBody = this.add.tileSprite(960,540,config.width, config.height, 'tophats');
         this.rainbow = this.physics.add.sprite(960,540, 'loadIcon');
         this.rainbow.play('loadIcon_anim');
@@ -57,7 +56,6 @@ class LoadingScene extends Phaser.Scene{
             this.theWord.visible=false;
             this.playButton.visible=true;
         }
-
     }
 
 }
