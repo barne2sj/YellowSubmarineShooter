@@ -68,7 +68,7 @@ class LoadingScene extends Phaser.Scene{
 */
         // add top label
         this.MoveUp = this.add.bitmapText(10, 5, "pixelFont", "W = Move Up ", 60);
-        this.MoveLeft = this.add.bitmapText(10, 85, "pixelFont", "A = Move Right ", 60)
+        this.MoveLeft = this.add.bitmapText(10, 85, "pixelFont", "A = Move Left ", 60)
         this.MoveRight = this.add.bitmapText(10, 165, "pixelFont", "S = Move Down ", 60);
         this.MoveDown = this.add.bitmapText(10, 245, "pixelFont", "D = Move Right" , 60);
         this.Fire = this.add.bitmapText(10, 325, "pixelFont", "SPACE = Fire" , 60);
