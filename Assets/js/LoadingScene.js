@@ -23,8 +23,9 @@ class LoadingScene extends Phaser.Scene{
         //Positioning icon and word
         this.loadIcon = this.add.sprite(config.width /2, config.height / 2, 'loadIcon');
         this.loadWord = this.add.sprite(config.width / 2, config.height + 145, 'loadWord');
-        this.load.bitmapFont("pixelFont", "Assets/font/font.png", "Assets/font/font.xml");
 
+         //load pixelfont
+        this.load.bitmapFont("pixelFont", "Assets/font/font.png", "Assets/font/font.xml");
     }
 
     create(){
@@ -53,13 +54,24 @@ class LoadingScene extends Phaser.Scene{
         }, this);
 
 
-        this.title1 = this.add.bitmapText(10, 5, "pixelFont", "To Play:", 60);
-        this.title2 = this.add.bitmapText(10, 65, "pixelFont", "Left: A", 60);
-        this.title3 = this.add.bitmapText(10, 125, "pixelFont", "Right: S", 60);
-        this.title4 = this.add.bitmapText(10, 185, "pixelFont", "Up: W", 60);
-        this.title5 = this.add.bitmapText(10, 245, "pixelFont", "Down: D", 60);
-        this.title6 = this.add.bitmapText(10, 305, "pixelFont", "Fire: Spacebar", 60);
-
+        /*//Score graphics
+        var graphics = this.add.graphics();
+        graphics.fillStyle(0x000000, 1);
+        graphics.beginPath();
+        graphics.moveTo(0,0);
+        graphics.lineTo(config.width, 0);
+        graphics.lineTo(config.width, 80);
+        graphics.lineTo(0, 80);
+        graphics.lineTo(0, 0);
+        graphics.closePath();
+        graphics.fillPath();
+*/
+        // add top label
+        this.MoveUp = this.add.bitmapText(10, 5, "pixelFont", "W = Move Up ", 60);
+        this.MoveLeft = this.add.bitmapText(10, 85, "pixelFont", "A = Move Right ", 60)
+        this.MoveRight = this.add.bitmapText(10, 165, "pixelFont", "S = Move Down ", 60);
+        this.MoveDown = this.add.bitmapText(10, 245, "pixelFont", "D = Move Right" , 60);
+        this.Fire = this.add.bitmapText(10, 325, "pixelFont", "SPACE = Fire" , 60);
     }
 
     update(){
