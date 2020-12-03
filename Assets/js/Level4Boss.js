@@ -179,7 +179,7 @@ class Level4Boss extends Phaser.Scene{
 
   //boss attack timer
   checkBossAttackTimer(){
-    if(this.bossAttackTimer > 140){
+    if(this.bossAttackTimer > 60){
       var bossProjectile = new PianoBossProjectile(this);
       this.bossAttackTimer = 0;
     }

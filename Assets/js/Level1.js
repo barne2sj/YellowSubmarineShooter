@@ -2,7 +2,7 @@
 var createEnemyTimer = 0;
 var enemyTimerRandomizer = Phaser.Math.Between(4, 6);
 var createPowerUpTimer = 0;
-var PowerUpTimerRandomizer = Phaser.Math.Between (10, 20);
+var PowerUpTimerRandomizer = Phaser.Math.Between (10, 15);
 var score = 0;
 var playerDamage = 200;
 var playerSpeed = 300;
@@ -231,7 +231,7 @@ class Level1 extends Phaser.Scene{
   checkCreatePowerUpTimer(time){
     if(createPowerUpTimer > time){
       createPowerUpTimer = 0;
-      PowerUpTimerRandomizer = Phaser.Math.Between(20,40);
+      PowerUpTimerRandomizer = Phaser.Math.Between(20, 40);
       createPowerUp(this);
     }
     else{
