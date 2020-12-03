@@ -23,6 +23,8 @@ class LoadingScene extends Phaser.Scene{
         //Positioning icon and word
         this.loadIcon = this.add.sprite(config.width /2, config.height / 2, 'loadIcon');
         this.loadWord = this.add.sprite(config.width / 2, config.height + 145, 'loadWord');
+        this.load.bitmapFont("pixelFont", "Assets/font/font.png", "Assets/font/font.xml");
+
     }
 
     create(){
@@ -49,6 +51,15 @@ class LoadingScene extends Phaser.Scene{
         this.playButton.on('pointerdown', function (pointer) {
             this.scene.scene.scene.start('Level1');
         }, this);
+
+
+        this.title1 = this.add.bitmapText(10, 5, "pixelFont", "To Play:", 60);
+        this.title2 = this.add.bitmapText(10, 65, "pixelFont", "Left: A", 60);
+        this.title3 = this.add.bitmapText(10, 125, "pixelFont", "Right: S", 60);
+        this.title4 = this.add.bitmapText(10, 185, "pixelFont", "Up: W", 60);
+        this.title5 = this.add.bitmapText(10, 245, "pixelFont", "Down: D", 60);
+        this.title6 = this.add.bitmapText(10, 305, "pixelFont", "Fire: Spacebar", 60);
+
     }
 
     update(){
