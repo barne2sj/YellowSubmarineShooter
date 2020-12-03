@@ -78,8 +78,8 @@ class Enemies extends Phaser.GameObjects.Sprite{
       this.projectileNumber = enemyNumber;
 
       this.body.velocity.x= -150;
-      this.health = 200 * levelMultiplier;
-      this.starthealth = 200 * levelMultiplier;
+      this.health = 400 * levelMultiplier;
+      this.starthealth = 400 * levelMultiplier;
   
       scene.enemies.add(this);
     }
