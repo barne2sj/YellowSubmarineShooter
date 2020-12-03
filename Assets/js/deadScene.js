@@ -41,7 +41,8 @@ class deadScene extends Phaser.Scene{
 
     this.replaybutton.on('pointerdown', function (pointer) {
       playerDamage = 200;
-      playerHealth = 200;
+      playerMaxHealth = 1000;
+      playerHealth = 1000;
       playerSpeed = 300;
       handBossJumpTimer = Phaser.Math.Between(20, 100);
       handBossJumpCount = 0;
