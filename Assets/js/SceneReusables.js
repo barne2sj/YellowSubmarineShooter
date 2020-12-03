@@ -90,7 +90,7 @@ function createSprites(scene){
         scene.physics.world.setBoundsCollision();
 
         //add keys
-        scene.shoot = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        scene.shoot = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         scene.leftKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         scene.rightKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         scene.upKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
