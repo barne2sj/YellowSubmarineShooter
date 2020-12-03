@@ -152,7 +152,7 @@ class Level4 extends Phaser.Scene{
     this.physics.add.overlap(this.submarine, this.PowerUps2, this.DamageUp, null, this);
     this.physics.add.overlap(this.submarine, this.PowerUps3, this.SpeedUp, null, this);
 
-    levelMultiplier = 10;
+    levelMultiplier = 4;
   }
 
   update ()
